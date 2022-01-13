@@ -37,7 +37,7 @@ public abstract class Model {
     
     private String name;
     private String serialNumber;
-    private String colour;
+    private String color;
     
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "size_id")

@@ -13,18 +13,18 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "phone_models")
+@Table(name = "vacuum_cleaners_models")
 @SuperBuilder(setterPrefix = "with")
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class PhoneModel extends Model {
+public class VacuumCleanerModel extends Model {
     
-    @Column(length = 20)
-    private Integer memoryInMb;
+    @Column(length = 10)
+    private Integer amountLitres;
     
-    @Column(length = 5)
-    private Integer numberCameras;
+    @Column(length = 10)
+    private Integer numberModes;
 }

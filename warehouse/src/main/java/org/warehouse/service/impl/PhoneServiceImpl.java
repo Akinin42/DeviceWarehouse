@@ -58,7 +58,7 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
     private void filterByCameras(List<Model> models, int numberOfCameras) {
         for (Model model : new ArrayList<>(models)) {
             PhoneModel phoneModel = (PhoneModel) model;
-            if (phoneModel.getNumberOfCameras() < numberOfCameras) {
+            if (phoneModel.getNumberCameras() < numberOfCameras) {
                 models.remove(model);
             }
         }
@@ -96,18 +96,19 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
                 .withId(phoneModelDto.getId())
                 .withName(phoneModelDto.getName())
                 .withSerialNumber(phoneModelDto.getSerialNumber())
-                .withColour(phoneModelDto.getColour())
+                .withColor(phoneModelDto.getColour())
                 .withSize(size)
                 .withCost(phoneModelDto.getCost())
                 .withAvailability(phoneModelDto.getAvailability())
                 .withMemoryInMb(phoneModelDto.getMemoryInMb())
-                .withNumberOfCameras(phoneModelDto.getNumberOfCameras())
+                .withNumberCameras(phoneModelDto.getNumberOfCameras())
                 .build();
     }
 
     @Override
     protected Phone createResultDevice(Phone device, List<Model> models) {
-        return Phone.builder().withId(device.getId())
+        return Phone.builder()
+                .withId(device.getId())
                 .withName(device.getName())
                 .withCountryOfManufacture(device.getCountryOfManufacture())
                 .withCompany(device.getCompany())

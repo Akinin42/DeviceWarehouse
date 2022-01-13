@@ -40,11 +40,11 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
     }
 
     @Override
-    public Optional<E> findByNameAndColourAndCost(String deviceName, String colour, int minCost, int maxCost) {
+    public Optional<E> findByNameAndColorAndCost(String deviceName, String color, int minCost, int maxCost) {
         E result = null;
         if (deviceDao.findByNameIgnoreCase(deviceName).isPresent()) {
             List<Model> models = new ArrayList<>(deviceDao.findByNameIgnoreCase(deviceName).get().getModels());
-            filterByColour(models, colour);
+            filterByColor(models, color);
             filterByCost(models, minCost, maxCost);
             result = createResultDevice(deviceDao.findByNameIgnoreCase(deviceName).get(), models);
 
@@ -52,10 +52,10 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
         return Optional.ofNullable(result);
     }
 
-    private void filterByColour(List<Model> models, String colour) {
-        if (colour != null && !colour.isEmpty()) {
+    private void filterByColor(List<Model> models, String color) {
+        if (color != null && !color.isEmpty()) {
             for (Model model : new ArrayList<>(models)) {
-                if (!model.getColour().equals(colour)) {
+                if (!model.getColor().equals(color)) {
                     models.remove(model);
                 }
             }

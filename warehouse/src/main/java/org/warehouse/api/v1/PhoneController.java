@@ -39,11 +39,11 @@ public class PhoneController {
         return phoneService.findByName(deviceName);
     }
 
-    @GetMapping(value = "/{name}", params = { "colour", "minCost", "maxCost" })
-    public Optional<Phone> findPhoneByNameAndColourAndCost(@PathVariable("name") String deviceName,
-            @RequestParam("colour") String colour, @RequestParam("minCost") int minCost,
+    @GetMapping(value = "/{name}", params = { "color", "minCost", "maxCost" })
+    public Optional<Phone> findPhoneByNameAndColorAndCost(@PathVariable("name") String deviceName,
+            @RequestParam("color") String colour, @RequestParam("minCost") int minCost,
             @RequestParam("maxCost") int maxCost) {
-        return phoneService.findByNameAndColourAndCost(deviceName, colour, minCost, maxCost);
+        return phoneService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
     }
 
     @GetMapping(value = "/{name}", params = { "memory", "cameras", "availability" })

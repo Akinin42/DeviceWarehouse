@@ -14,7 +14,7 @@ public interface DeviceService<E, T> {
 
     List<E> findAllDevices();
     
-    Optional<E> findByNameAndColourAndCost(String deviceName, String colour, int minCost, int maxCost);
+    Optional<E> findByNameAndColorAndCost(String deviceName, String color, int minCost, int maxCost);
 
     void addModelForDevice(String deviceName, ModelDto modelDto);
     
