@@ -1,6 +1,7 @@
 package org.warehouse.api.v1;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.warehouse.dto.DeviceDto;
@@ -30,6 +32,17 @@ public class PhoneController {
     @GetMapping
     public List<Phone> findAllPhones() {
         return phoneService.findAllDevices();
+    }
+    
+    @GetMapping("/{name}")
+    public Optional<Phone> findPhone(@PathVariable("name") String deviceName) {
+        return phoneService.findByName(deviceName);
+    }
+    
+    @GetMapping(params = { "name", "colour", "minCost", "maxCost" })
+    public Optional<Phone> findPhoneByNameAndColour(@RequestParam("name") String deviceName, @RequestParam("colour") String colour,
+            @RequestParam("minCost") int minCost, @RequestParam("maxCost") int maxCost){
+        return phoneService.findByNameAndColourAndCost(deviceName, colour, minCost, maxCost);
     }
 
     @PostMapping

@@ -1,5 +1,7 @@
 package org.warehouse.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.warehouse.dao.PhoneDao;
@@ -7,8 +9,10 @@ import org.warehouse.dao.PhoneModelDao;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.ModelDto;
 import org.warehouse.dto.PhoneModelDto;
+import org.warehouse.entity.Model;
 import org.warehouse.entity.Phone;
 import org.warehouse.entity.PhoneModel;
+import org.warehouse.entity.Size;
 import org.warehouse.service.PhoneService;
 
 @Service
@@ -28,7 +32,7 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
     protected Phone mapDtoToEntity(DeviceDto deviceDto) {        
         return Phone.builder()
               .withId(deviceDto.getId())
-              .withName(deviceDto.getName())
+              .withName(deviceDto.getName())              
               .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
               .withCompany(deviceDto.getCompany())
               .withOnlineOrder(deviceDto.getOnlineOrder())
@@ -39,15 +43,34 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
     @Override
     protected PhoneModel mapModelDtoToEntity(ModelDto modelDto) {
         PhoneModelDto phoneModelDto = (PhoneModelDto) modelDto;
+        Size size = Size.builder()
+                .withLengthMm(modelDto.getLengthMm())
+                .withWidthMm(modelDto.getWidthMm())
+                .withHeightMm(modelDto.getHeightMm())
+                .build();
         return PhoneModel.builder()
                 .withId(phoneModelDto.getId())
                 .withName(phoneModelDto.getName())
                 .withSerialNumber(phoneModelDto.getSerialNumber())
                 .withColour(phoneModelDto.getColour())
+                .withSize(size)
                 .withCost(phoneModelDto.getCost())
                 .withAvailability(phoneModelDto.getAvailability())
                 .withMemoryInMb(phoneModelDto.getMemoryInMb())
                 .withNumberOfCameras(phoneModelDto.getNumberOfCameras())
+                .build();
+    }
+
+    @Override
+    protected Phone createResultDevice(Phone device, List<Model> models) {        
+        return Phone.builder()
+                .withId(device.getId())
+                .withName(device.getName())              
+                .withCountryOfManufacture(device.getCountryOfManufacture())
+                .withCompany(device.getCompany())
+                .withOnlineOrder(device.getOnlineOrder())
+                .withInstallment(device.getInstallment())
+                .withModels(models)
                 .build();
     }
 }

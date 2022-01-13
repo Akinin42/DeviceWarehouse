@@ -1,6 +1,8 @@
 package org.warehouse.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,27 +30,74 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
     }
 
     @Override
+    public Optional<E> findByName(String deviceName) {
+        return Optional.ofNullable(deviceDao.findByNameIgnoreCase(deviceName).get());
+    }
+
+    @Override
     public List<E> findAllDevices() {
         return deviceDao.findAll();
     }
-    
+
     @Override
-    public void addModelForDevice(String deviceName, ModelDto modelDto) {        
-        E device = deviceDao.findByName(deviceName).get();
-        device.addModel(mapModelDtoToEntity(modelDto));
-        deviceDao.save(device);
+    public Optional<E> findByNameAndColourAndCost(String deviceName, String colour, int minCost, int maxCost) {
+        E result = null;
+        if (deviceDao.findByNameIgnoreCase(deviceName).isPresent()) {
+            List<Model> models = new ArrayList<>(deviceDao.findByNameIgnoreCase(deviceName).get().getModels());
+            filterByColour(models, colour);
+            filterByCost(models, minCost, maxCost);
+            result = createResultDevice(deviceDao.findByNameIgnoreCase(deviceName).get(), models);
+
+        }
+        return Optional.ofNullable(result);
     }
-    @Override
-    public List<T> findAllModelsForDevice(String deviceName){        
-        return (List<T>) deviceDao.findByName(deviceName).get().getModels();        
+
+    private void filterByColour(List<Model> models, String colour) {
+        if (colour != null && !colour.isEmpty()) {
+            for (Model model : new ArrayList<>(models)) {
+                if (!model.getColour().equals(colour)) {
+                    models.remove(model);
+                }
+            }
+        }
     }
-    
+
+    private void filterByCost(List<Model> models, int minCost, int maxCost) {
+        if (minCost != 0 || maxCost != 0) {
+            for (Model model : new ArrayList<>(models)) {
+                if (model.getCost() < minCost || model.getCost() > maxCost) {
+                    models.remove(model);
+                }
+            }
+        }
+    }
+
     @Override
-    public List<T> findAllModels(){
+    public void addModelForDevice(String deviceName, ModelDto modelDto) {
+        if (deviceDao.findByNameIgnoreCase(deviceName).isPresent()) {
+            E device = deviceDao.findByNameIgnoreCase(deviceName).get();
+            device.addModel(mapModelDtoToEntity(modelDto));
+            deviceDao.save(device);
+        }
+    }
+
+    @Override
+    public List<T> findAllModelsForDevice(String deviceName) {
+        List<T> models = new ArrayList<>();
+        if (deviceDao.findByNameIgnoreCase(deviceName.toLowerCase()).isPresent()) {
+            models = (List<T>) deviceDao.findByNameIgnoreCase(deviceName.toLowerCase()).get().getModels();
+        }
+        return models;
+    }
+
+    @Override
+    public List<T> findAllModels() {
         return modelDao.findAll();
     }
 
     protected abstract E mapDtoToEntity(DeviceDto deviceDto);
-    
+
     protected abstract T mapModelDtoToEntity(ModelDto modelDto);
+
+    protected abstract E createResultDevice(E device, List<Model> models);
 }

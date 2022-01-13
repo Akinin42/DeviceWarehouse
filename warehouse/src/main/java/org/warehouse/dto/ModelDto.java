@@ -20,6 +20,9 @@ public class ModelDto {
     private String name;
     private String serialNumber;
     private String colour;
+    private Integer lengthMm;
+    private Integer widthMm;
+    private Integer heightMm;
     private Integer cost;
     private Boolean availability;
 }

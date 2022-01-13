@@ -9,5 +9,5 @@ import org.warehouse.entity.Device;
 @Repository
 public interface DeviceDao <E extends Device> extends JpaRepository<E, Integer> {
 
-    Optional<E> findByName(String deviceName);
+    Optional<E> findByNameIgnoreCase(String deviceName);
 }
