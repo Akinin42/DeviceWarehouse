@@ -33,22 +33,38 @@ public class PhoneController {
     public List<Phone> findAllPhones() {
         return phoneService.findAllDevices();
     }
-    
+
     @GetMapping("/{name}")
     public Optional<Phone> findPhone(@PathVariable("name") String deviceName) {
         return phoneService.findByName(deviceName);
     }
-    
-    @GetMapping(params = { "name", "colour", "minCost", "maxCost" })
-    public Optional<Phone> findPhoneByNameAndColour(@RequestParam("name") String deviceName, @RequestParam("colour") String colour,
-            @RequestParam("minCost") int minCost, @RequestParam("maxCost") int maxCost){
+
+    @GetMapping(value = "/{name}", params = { "colour", "minCost", "maxCost" })
+    public Optional<Phone> findPhoneByNameAndColourAndCost(@PathVariable("name") String deviceName,
+            @RequestParam("colour") String colour, @RequestParam("minCost") int minCost,
+            @RequestParam("maxCost") int maxCost) {
         return phoneService.findByNameAndColourAndCost(deviceName, colour, minCost, maxCost);
+    }
+
+    @GetMapping(value = "/{name}", params = { "memory", "cameras", "availability" })
+    public Optional<Phone> findAvailabilityPhoneByMemoryAndCameras(@PathVariable("name") String deviceName,
+            @RequestParam("memory") int memory, @RequestParam("cameras") int numberOfCameras,
+            @RequestParam("availability") boolean availability) {
+        return phoneService.findAvailabilityByNameAndMemoryAndCameras(deviceName, memory, numberOfCameras,
+                availability);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addPhone(@Valid @RequestBody DeviceDto phone) {
         phoneService.addDevice(phone);
+    }
+
+    @PostMapping("/models/{name}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addPhoneModelForDevice(@Valid @RequestBody PhoneModelDto phoneModelDto,
+            @PathVariable("name") String deviceName) {
+        phoneService.addModelForDevice(deviceName, phoneModelDto);
     }
 
     @GetMapping("/models")
@@ -59,12 +75,5 @@ public class PhoneController {
     @GetMapping("/models/{name}")
     public List<PhoneModel> findAllModelsForDevice(@PathVariable("name") String deviceName) {
         return phoneService.findAllModelsForDevice(deviceName);
-    }
-
-    @PostMapping("/models/{name}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addPhoneModelForDevice(@Valid @RequestBody PhoneModelDto phoneModelDto,
-            @PathVariable("name") String deviceName) {
-        phoneService.addModelForDevice(deviceName, phoneModelDto);
     }
 }

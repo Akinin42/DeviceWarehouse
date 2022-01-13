@@ -1,6 +1,8 @@
 package org.warehouse.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,25 +21,67 @@ import org.warehouse.service.PhoneService;
 @Transactional
 public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> implements PhoneService {
 
-    private final PhoneDao phoneDao;
-    private final PhoneModelDao phoneModelDao;
+    protected final PhoneDao phoneDao;
 
     public PhoneServiceImpl(PhoneDao phoneDao, PhoneModelDao phoneModelDao) {
-        super(phoneDao, phoneModelDao);        
+        super(phoneDao, phoneModelDao);
         this.phoneDao = phoneDao;
-        this.phoneModelDao = phoneModelDao;
     }
 
     @Override
-    protected Phone mapDtoToEntity(DeviceDto deviceDto) {        
+    public Optional<Phone> findAvailabilityByNameAndMemoryAndCameras(String deviceName, int memory, int numberOfCameras,
+            boolean availability) {
+        Phone result = null;
+        if (phoneDao.findByNameIgnoreCase(deviceName).isPresent()) {
+            List<Model> models = new ArrayList<>(phoneDao.findByNameIgnoreCase(deviceName).get().getModels());
+            filterByMemory(models, memory);
+            filterByCameras(models, numberOfCameras);
+            if (Boolean.TRUE.equals(availability)) {
+                filterByAvailability(models);
+            }
+            result = createResultDevice(phoneDao.findByNameIgnoreCase(deviceName).get(), models);
+        }
+        return Optional.ofNullable(result);
+    }
+
+    private void filterByMemory(List<Model> models, int memory) {
+        if (memory != 0) {
+            for (Model model : new ArrayList<>(models)) {
+                PhoneModel phoneModel = (PhoneModel) model;
+                if (phoneModel.getMemoryInMb() < memory) {
+                    models.remove(model);
+                }
+            }
+        }
+    }
+
+    private void filterByCameras(List<Model> models, int numberOfCameras) {
+        for (Model model : new ArrayList<>(models)) {
+            PhoneModel phoneModel = (PhoneModel) model;
+            if (phoneModel.getNumberOfCameras() < numberOfCameras) {
+                models.remove(model);
+            }
+        }
+    }
+
+    private void filterByAvailability(List<Model> models) {
+        for (Model model : new ArrayList<>(models)) {
+            if (Boolean.FALSE.equals(model.getAvailability())) {
+                models.remove(model);
+            }
+        }
+    }
+
+    @Override
+    protected Phone mapDtoToEntity(DeviceDto deviceDto) {
         return Phone.builder()
-              .withId(deviceDto.getId())
-              .withName(deviceDto.getName())              
-              .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
-              .withCompany(deviceDto.getCompany())
-              .withOnlineOrder(deviceDto.getOnlineOrder())
-              .withInstallment(deviceDto.getInstallment())
-              .build();
+                .withId(deviceDto.getId())
+                .withName(deviceDto.getName())
+                .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
+                .withCompany(deviceDto.getCompany())
+                .withOnlineOrder(deviceDto.getOnlineOrder())
+                .withInstallment(deviceDto.getInstallment())
+                .build();
     }
 
     @Override
@@ -62,10 +106,9 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
     }
 
     @Override
-    protected Phone createResultDevice(Phone device, List<Model> models) {        
-        return Phone.builder()
-                .withId(device.getId())
-                .withName(device.getName())              
+    protected Phone createResultDevice(Phone device, List<Model> models) {
+        return Phone.builder().withId(device.getId())
+                .withName(device.getName())
                 .withCountryOfManufacture(device.getCountryOfManufacture())
                 .withCompany(device.getCompany())
                 .withOnlineOrder(device.getOnlineOrder())
