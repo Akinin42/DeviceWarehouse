@@ -61,11 +61,9 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
     }
 
     private void filterByCost(List<Model> models, int minCost, int maxCost) {
-        if (minCost != 0 || maxCost != 0) {
-            for (Model model : new ArrayList<>(models)) {
-                if (model.getCost() < minCost || model.getCost() > maxCost) {
-                    models.remove(model);
-                }
+        for (Model model : new ArrayList<>(models)) {
+            if (model.getCost() < minCost || (model.getCost() > maxCost && maxCost != 0)) {
+                models.remove(model);
             }
         }
     }
