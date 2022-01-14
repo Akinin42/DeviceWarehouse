@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.PhoneModelDto;
 import org.warehouse.entity.Phone;
-import org.warehouse.entity.PhoneModel;
 import org.warehouse.service.PhoneService;
 
 import lombok.AllArgsConstructor;
@@ -65,15 +64,5 @@ public class PhoneController {
     public void addPhoneModelForDevice(@Valid @RequestBody PhoneModelDto phoneModelDto,
             @PathVariable("name") String deviceName) {
         phoneService.addModelForDevice(deviceName, phoneModelDto);
-    }
-
-    @GetMapping("/models")
-    public List<PhoneModel> findAllModels() {
-        return phoneService.findAllModels();
-    }
-
-    @GetMapping("/models/{name}")
-    public List<PhoneModel> findAllModelsForDevice(@PathVariable("name") String deviceName) {
-        return phoneService.findAllModelsForDevice(deviceName);
     }
 }

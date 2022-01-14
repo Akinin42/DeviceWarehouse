@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.warehouse.dao.PhoneDao;
-import org.warehouse.dao.PhoneModelDao;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.ModelDto;
 import org.warehouse.dto.PhoneModelDto;
@@ -23,8 +22,8 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
 
     protected final PhoneDao phoneDao;
 
-    public PhoneServiceImpl(PhoneDao phoneDao, PhoneModelDao phoneModelDao) {
-        super(phoneDao, phoneModelDao);
+    public PhoneServiceImpl(PhoneDao phoneDao) {
+        super(phoneDao);
         this.phoneDao = phoneDao;
     }
 

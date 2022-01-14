@@ -1,11 +1,12 @@
 package org.warehouse.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.warehouse.dao.VacuumCleanerDao;
-import org.warehouse.dao.VacuumCleanerModelDao;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.ModelDto;
 import org.warehouse.dto.VacuumCleanerModelDto;
@@ -21,10 +22,54 @@ public class VacuumCleanerServiceImpl extends DeviceServiceImpl<VacuumCleaner, V
 
     protected final VacuumCleanerDao vacuumCleanerDao;
 
-    public VacuumCleanerServiceImpl(VacuumCleanerDao vacuumCleanerDao, VacuumCleanerModelDao vacuumCleanerModelDao) {
-        super(vacuumCleanerDao, null);
+    public VacuumCleanerServiceImpl(VacuumCleanerDao vacuumCleanerDao) {
+        super(vacuumCleanerDao);
         this.vacuumCleanerDao = vacuumCleanerDao;
     }
+    
+    @Override
+    public Optional<VacuumCleaner> findAvailabilityByNameAndAmountAndModes(String deviceName, int amountLitres,
+            int numberOfModes, boolean availability) {
+        VacuumCleaner result = null;
+        if (vacuumCleanerDao.findByNameIgnoreCase(deviceName).isPresent()) {
+            List<Model> models = new ArrayList<>(vacuumCleanerDao.findByNameIgnoreCase(deviceName).get().getModels());
+            filterByAmount(models, amountLitres);
+            filterByModes(models, numberOfModes);
+            if (Boolean.TRUE.equals(availability)) {
+                filterByAvailability(models);
+            }
+            result = createResultDevice(vacuumCleanerDao.findByNameIgnoreCase(deviceName).get(), models);
+        }
+        return Optional.ofNullable(result);
+    }
+    
+    private void filterByAmount(List<Model> models, int amountLitres) {
+        if (amountLitres != 0) {
+            for (Model model : new ArrayList<>(models)) {
+                VacuumCleanerModel vacuumCleanerModel = (VacuumCleanerModel) model;
+                if (vacuumCleanerModel.getAmountLitres() < amountLitres) {
+                    models.remove(model);
+                }
+            }
+        }
+    }
+
+    private void filterByModes(List<Model> models, int numberOfModes) {
+        for (Model model : new ArrayList<>(models)) {
+            VacuumCleanerModel vacuumCleanerModel = (VacuumCleanerModel) model;
+            if (vacuumCleanerModel.getNumberModes() < numberOfModes) {
+                models.remove(model);
+            }
+        }
+    }
+
+    private void filterByAvailability(List<Model> models) {
+        for (Model model : new ArrayList<>(models)) {
+            if (Boolean.FALSE.equals(model.getAvailability())) {
+                models.remove(model);
+            }
+        }
+    }    
 
     @Override
     protected VacuumCleaner mapDtoToEntity(DeviceDto deviceDto) {

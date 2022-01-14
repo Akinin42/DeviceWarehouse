@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.VacuumCleanerModelDto;
 import org.warehouse.entity.VacuumCleaner;
-import org.warehouse.entity.VacuumCleanerModel;
 import org.warehouse.service.VacuumCleanerService;
 
 import lombok.AllArgsConstructor;
@@ -45,27 +44,25 @@ public class VacuumCleanerController {
             @RequestParam("maxCost") int maxCost) {
         return vacuumCleanerService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
     }
+    
+    @GetMapping(value = "/{name}", params = { "amount", "modes", "availability" })
+    public Optional<VacuumCleaner> findAvailabilityVacuumCleanerByAmountAndModes(@PathVariable("name") String deviceName,
+            @RequestParam("amount") int amount, @RequestParam("modes") int numberOfModes,
+            @RequestParam("availability") boolean availability) {
+        return vacuumCleanerService.findAvailabilityByNameAndAmountAndModes(deviceName, amount, numberOfModes,
+                availability);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addVacuumCleaner(@Valid @RequestBody DeviceDto phone) {
-        vacuumCleanerService.addDevice(phone);
+    public void addVacuumCleaner(@Valid @RequestBody DeviceDto vacuumCleaner) {
+        vacuumCleanerService.addDevice(vacuumCleaner);
     }
 
     @PostMapping("/models/{name}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addVacuumCleanerModelForDevice(@Valid @RequestBody VacuumCleanerModelDto phoneModelDto,
+    public void addVacuumCleanerModelForDevice(@Valid @RequestBody VacuumCleanerModelDto vacuumCleanerModelDto,
             @PathVariable("name") String deviceName) {
-        vacuumCleanerService.addModelForDevice(deviceName, phoneModelDto);
-    }
-
-    @GetMapping("/models")
-    public List<VacuumCleanerModel> findAllModels() {
-        return vacuumCleanerService.findAllModels();
-    }
-
-    @GetMapping("/models/{name}")
-    public List<VacuumCleanerModel> findAllModelsForDevice(@PathVariable("name") String deviceName) {
-        return vacuumCleanerService.findAllModelsForDevice(deviceName);
+        vacuumCleanerService.addModelForDevice(deviceName, vacuumCleanerModelDto);
     }
 }
