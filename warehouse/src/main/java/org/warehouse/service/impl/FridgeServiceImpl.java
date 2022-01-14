@@ -75,28 +75,47 @@ public class FridgeServiceImpl extends DeviceServiceImpl<Fridge, FridgeModel> im
 
     @Override
     protected Fridge mapDtoToEntity(DeviceDto deviceDto) {
-        return Fridge.builder().withId(deviceDto.getId()).withName(deviceDto.getName())
-                .withCountryOfManufacture(deviceDto.getCountryOfManufacture()).withCompany(deviceDto.getCompany())
-                .withOnlineOrder(deviceDto.getOnlineOrder()).withInstallment(deviceDto.getInstallment()).build();
+        return Fridge.builder()
+                .withId(deviceDto.getId())
+                .withName(deviceDto.getName())
+                .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
+                .withCompany(deviceDto.getCompany())
+                .withOnlineOrder(deviceDto.getOnlineOrder())
+                .withInstallment(deviceDto.getInstallment())
+                .build();
     }
 
     @Override
     protected FridgeModel mapModelDtoToEntity(ModelDto modelDto) {
         FridgeModelDto fridgeModelDto = (FridgeModelDto) modelDto;
-        Size size = Size.builder().withLengthMm(modelDto.getLengthMm()).withWidthMm(modelDto.getWidthMm())
-                .withHeightMm(modelDto.getHeightMm()).build();
-        return FridgeModel.builder().withId(fridgeModelDto.getId()).withName(fridgeModelDto.getName())
-                .withSerialNumber(fridgeModelDto.getSerialNumber()).withColor(fridgeModelDto.getColour()).withSize(size)
-                .withCost(fridgeModelDto.getCost()).withAvailability(fridgeModelDto.getAvailability())
-                .withNumberOfDoor(fridgeModelDto.getNumberOfDoor()).withCompressor(fridgeModelDto.getCompressor())
+        Size size = Size.builder()
+                .withLengthMm(modelDto.getLengthMm())
+                .withWidthMm(modelDto.getWidthMm())
+                .withHeightMm(modelDto.getHeightMm())
+                .build();
+        return FridgeModel.builder()
+                .withId(fridgeModelDto.getId())
+                .withName(fridgeModelDto.getName())
+                .withSerialNumber(fridgeModelDto.getSerialNumber())
+                .withColor(fridgeModelDto.getColour())
+                .withSize(size)
+                .withCost(fridgeModelDto.getCost())
+                .withAvailability(fridgeModelDto.getAvailability())
+                .withNumberOfDoor(fridgeModelDto.getNumberOfDoor())
+                .withCompressor(fridgeModelDto.getCompressor())
                 .build();
     }
 
     @Override
     protected Fridge createResultDevice(Fridge device, List<Model> models) {
-        return Fridge.builder().withId(device.getId()).withName(device.getName())
-                .withCountryOfManufacture(device.getCountryOfManufacture()).withCompany(device.getCompany())
-                .withOnlineOrder(device.getOnlineOrder()).withInstallment(device.getInstallment()).withModels(models)
+        return Fridge.builder()
+                .withId(device.getId())
+                .withName(device.getName())
+                .withCountryOfManufacture(device.getCountryOfManufacture())
+                .withCompany(device.getCompany())
+                .withOnlineOrder(device.getOnlineOrder())
+                .withInstallment(device.getInstallment())
+                .withModels(models)
                 .build();
     }
 }
