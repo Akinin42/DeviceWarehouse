@@ -13,7 +13,7 @@ import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.exception.EntityAlreadyExistException;
 import org.warehouse.exception.EntityNotExistException;
 import org.warehouse.service.DeviceService;
-import org.warehouse.util.DeviceSorter;
+import org.warehouse.service.DeviceSorter;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -127,7 +127,7 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
 
     protected void checkDeviceExists(String deviceName) {
         if (!deviceDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            throw new EntityNotExistException(String.format("Device witn name %s not exists", deviceName));
+            throw new EntityNotExistException(String.format("Device with name %s not found!", deviceName));
         }
     }
 

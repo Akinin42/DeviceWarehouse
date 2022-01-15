@@ -13,8 +13,8 @@ import org.warehouse.entity.Size;
 import org.warehouse.entity.device.VacuumCleaner;
 import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.entity.devicemodel.VacuumCleanerModel;
+import org.warehouse.service.DeviceSorter;
 import org.warehouse.service.VacuumCleanerService;
-import org.warehouse.util.DeviceSorter;
 
 @Service
 @Transactional

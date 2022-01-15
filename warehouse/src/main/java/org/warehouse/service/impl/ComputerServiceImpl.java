@@ -14,7 +14,7 @@ import org.warehouse.entity.device.Computer;
 import org.warehouse.entity.devicemodel.ComputerModel;
 import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.service.ComputerService;
-import org.warehouse.util.DeviceSorter;
+import org.warehouse.service.DeviceSorter;
 
 @Service
 @Transactional

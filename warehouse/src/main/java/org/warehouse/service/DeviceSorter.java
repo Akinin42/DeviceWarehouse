@@ -1,4 +1,4 @@
-package org.warehouse.util;
+package org.warehouse.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.warehouse.entity.device.Device;
 import org.warehouse.entity.devicemodel.Model;
 
 @Component
-public final class DeviceSorter<E extends Device> {    
+public class DeviceSorter<E extends Device> {    
     
     public List<E> sortByCost(List<E> devices) {
         List<E> sortedDevices = new ArrayList<>();

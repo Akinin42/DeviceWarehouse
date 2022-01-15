@@ -17,6 +17,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <io.swagger.core.v3.version>2.1.6</io.swagger.core.v3.version>
         <org.springdoc.version>1.5.9</org.springdoc.version>
+        <jacoco.maven.plugin.version>0.8.6</jacoco.maven.plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -41,6 +42,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -71,6 +77,51 @@
                 <configuration>
                     <finalName>warehouse</finalName>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>CLASS</element>
+                                    <excludes>
+                                        <exclude>org.warehouse.entity*</exclude>
+                                        <exclude>org.warehouse.dto*</exclude>
+                                        <exclude>org.warehouse.config*</exclude>
+                                        <exclude>org.university.WarehouseApplicationStarter*</exclude>
+                                    </excludes>
+                                    <limits>
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.90</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

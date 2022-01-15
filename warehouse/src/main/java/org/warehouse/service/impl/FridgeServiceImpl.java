@@ -13,8 +13,8 @@ import org.warehouse.entity.Size;
 import org.warehouse.entity.device.Fridge;
 import org.warehouse.entity.devicemodel.FridgeModel;
 import org.warehouse.entity.devicemodel.Model;
+import org.warehouse.service.DeviceSorter;
 import org.warehouse.service.FridgeService;
-import org.warehouse.util.DeviceSorter;
 
 @Service
 @Transactional

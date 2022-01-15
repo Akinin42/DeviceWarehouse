@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.warehouse.dao.DeviceDao;
 import org.warehouse.entity.device.Device;
+import org.warehouse.service.DeviceSorter;
 import org.warehouse.service.WarehouseService;
-import org.warehouse.util.DeviceSorter;
 
 import lombok.AllArgsConstructor;
 

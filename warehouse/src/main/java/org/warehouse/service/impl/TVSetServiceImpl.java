@@ -13,8 +13,8 @@ import org.warehouse.entity.Size;
 import org.warehouse.entity.device.TVSet;
 import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.entity.devicemodel.TVSetModel;
+import org.warehouse.service.DeviceSorter;
 import org.warehouse.service.TVSetService;
-import org.warehouse.util.DeviceSorter;
 
 @Service
 @Transactional
