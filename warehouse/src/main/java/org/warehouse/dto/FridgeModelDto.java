@@ -1,7 +1,7 @@
 package org.warehouse.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class FridgeModelDto extends ModelDto {
     
-    @Positive
+    @Min(1)
     private Integer numberOfDoor;
     
     @NotBlank

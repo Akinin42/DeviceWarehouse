@@ -1,7 +1,6 @@
 package org.warehouse.dto;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Positive;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class PhoneModelDto extends ModelDto {
     
-    @Positive
+    @Min(1)
     private Integer memoryInMb;
     
     @Min(0)

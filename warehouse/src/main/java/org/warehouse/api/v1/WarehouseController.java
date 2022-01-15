@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.warehouse.entity.device.Device;
 import org.warehouse.service.WarehouseService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
@@ -20,16 +21,22 @@ public class WarehouseController {
     private final WarehouseService warehouseService;
 
     @GetMapping
+    @Operation(summary = "Find everything devices in warehouse", 
+        description = "Return everything devices in warehouse")
     public List<Device> findAllDevices() {
         return warehouseService.findAllDevices();
     }
-    
+
     @GetMapping("/nameorder")
+    @Operation(summary = "Find everything ordered ascending devices in warehouse by name", 
+        description = "Return everything ordered ascending devices in warehouse by name")
     public List<Device> findAllDevicesOrderedByName() {
         return warehouseService.findAllDevicesOrderedByName();
     }
-    
+
     @GetMapping("/costorder")
+    @Operation(summary = "Find everything ordered ascending devices in warehouse by cost", 
+        description = "Return everything ordered ascending devices in warehouse by cost")
     public List<Device> findAllDevicesOrderedByCost() {
         return warehouseService.findAllDevicesOrderedByCost();
     }

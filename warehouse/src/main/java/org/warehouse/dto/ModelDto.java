@@ -1,8 +1,8 @@
 package org.warehouse.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -31,16 +31,16 @@ public class ModelDto {
     @NotBlank
     private String colour;
     
-    @Positive
+    @Min(1)
     private Integer lengthMm;
     
-    @Positive
+    @Min(1)
     private Integer widthMm;
     
-    @Positive
+    @Min(1)
     private Integer heightMm;
     
-    @Positive
+    @Min(1)
     private Integer cost;
     
     @NotNull
