@@ -14,6 +14,7 @@ import org.warehouse.entity.device.Computer;
 import org.warehouse.entity.devicemodel.ComputerModel;
 import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.service.ComputerService;
+import org.warehouse.util.DeviceSorter;
 
 @Service
 @Transactional
@@ -21,22 +22,37 @@ public class ComputerServiceImpl extends DeviceServiceImpl<Computer, ComputerMod
 
     protected final ComputerDao computerDao;
 
-    public ComputerServiceImpl(ComputerDao computerDao) {
-        super(computerDao);
+    public ComputerServiceImpl(ComputerDao computerDao, DeviceSorter<Computer> deviceSorter) {
+        super(computerDao, deviceSorter);
         this.computerDao = computerDao;
+    }
+    
+    @Override
+    public List<Computer> findAllByCategory(String category) {
+        List<Computer> computers = computerDao.findAll();
+        List<Computer> result = new ArrayList<>();
+        for (Computer computer : computers) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(computer.getName()));
+            filterByCategory(models, category);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(computer, models));
+            }
+        }
+        return result;
     }
 
     @Override
-    public Computer findAvailabilityByNameAndCategoryAndProcessor(String deviceName, String category,
-            String processor, boolean availability) {
-        checkDeviceExists(deviceName);
-        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
-        filterByCategory(models, category);
-        filterByProcessor(models, processor);
-        if (Boolean.TRUE.equals(availability)) {
-            filterByAvailability(models);
+    public List<Computer> findAllByProcessor(String processor) {
+        List<Computer> computers = computerDao.findAll();
+        List<Computer> result = new ArrayList<>();
+        for (Computer computer : computers) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(computer.getName()));
+            filterByProcessor(models, processor);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(computer, models));
+            }
         }
-        return createResultDevice(computerDao.findByNameIgnoreCase(deviceName).get(), models);
+        return result;
     }
 
     private void filterByCategory(List<Model> models, String category) {
@@ -57,14 +73,6 @@ public class ComputerServiceImpl extends DeviceServiceImpl<Computer, ComputerMod
                 if (!computerModel.getProcessor().equals(processor)) {
                     models.remove(model);
                 }
-            }
-        }
-    }
-
-    private void filterByAvailability(List<Model> models) {
-        for (Model model : new ArrayList<>(models)) {
-            if (Boolean.FALSE.equals(model.getAvailability())) {
-                models.remove(model);
             }
         }
     }

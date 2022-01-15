@@ -1,10 +1,13 @@
 package org.warehouse.service;
 
+import java.util.List;
+
 import org.warehouse.entity.device.TVSet;
 import org.warehouse.entity.devicemodel.TVSetModel;
 
 public interface TVSetService extends DeviceService<TVSet, TVSetModel> {
 
-    TVSet findAvailabilityByNameAndCategoryAndTechnology(String deviceName, String category,
-            String technology, boolean availability);
+    List<TVSet> findAllByCategory(String category);
+
+    List<TVSet> findAllByTechnology(String technology);
 }

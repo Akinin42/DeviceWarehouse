@@ -14,6 +14,7 @@ import org.warehouse.entity.device.TVSet;
 import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.entity.devicemodel.TVSetModel;
 import org.warehouse.service.TVSetService;
+import org.warehouse.util.DeviceSorter;
 
 @Service
 @Transactional
@@ -21,22 +22,37 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
 
     protected final TVSetDao tvsetDao;
 
-    public TVSetServiceImpl(TVSetDao tvsetDao) {
-        super(tvsetDao);
+    public TVSetServiceImpl(TVSetDao tvsetDao, DeviceSorter<TVSet> deviceSorter) {
+        super(tvsetDao, deviceSorter);
         this.tvsetDao = tvsetDao;
+    }
+    
+    @Override
+    public List<TVSet> findAllByCategory(String category) {
+        List<TVSet> tvsets = tvsetDao.findAll();
+        List<TVSet> result = new ArrayList<>();
+        for (TVSet tvset : tvsets) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(tvset.getName()));
+            filterByCategory(models, category);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(tvset, models));
+            }
+        }
+        return result;
     }
 
     @Override
-    public TVSet findAvailabilityByNameAndCategoryAndTechnology(String deviceName, String category,
-            String technology, boolean availability) {
-        checkDeviceExists(deviceName);
-        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
-        filterByCategory(models, category);
-        filterByTechnology(models, technology);
-        if (Boolean.TRUE.equals(availability)) {
-            filterByAvailability(models);
+    public List<TVSet> findAllByTechnology(String technology) {
+        List<TVSet> tvsets = tvsetDao.findAll();
+        List<TVSet> result = new ArrayList<>();
+        for (TVSet tvset : tvsets) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(tvset.getName()));
+            filterByTechnology(models, technology);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(tvset, models));
+            }
         }
-        return createResultDevice(tvsetDao.findByNameIgnoreCase(deviceName).get(), models);
+        return result;
     }
 
     private void filterByCategory(List<Model> models, String category) {
@@ -57,14 +73,6 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
                 if (!tvsetModel.getTechnology().equals(technology)) {
                     models.remove(model);
                 }
-            }
-        }
-    }
-
-    private void filterByAvailability(List<Model> models) {
-        for (Model model : new ArrayList<>(models)) {
-            if (Boolean.FALSE.equals(model.getAvailability())) {
-                models.remove(model);
             }
         }
     }

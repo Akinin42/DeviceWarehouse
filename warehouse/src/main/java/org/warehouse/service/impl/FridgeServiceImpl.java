@@ -14,6 +14,7 @@ import org.warehouse.entity.device.Fridge;
 import org.warehouse.entity.devicemodel.FridgeModel;
 import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.service.FridgeService;
+import org.warehouse.util.DeviceSorter;
 
 @Service
 @Transactional
@@ -21,22 +22,37 @@ public class FridgeServiceImpl extends DeviceServiceImpl<Fridge, FridgeModel> im
 
     protected final FridgeDao fridgeDao;
 
-    public FridgeServiceImpl(FridgeDao fridgeDao) {
-        super(fridgeDao);
+    public FridgeServiceImpl(FridgeDao fridgeDao, DeviceSorter<Fridge> deviceSorter) {
+        super(fridgeDao, deviceSorter);
         this.fridgeDao = fridgeDao;
+    }
+    
+    @Override
+    public List<Fridge> findAllByDoors(int numberOfDoor) {
+        List<Fridge> fridges = fridgeDao.findAll();
+        List<Fridge> result = new ArrayList<>();
+        for (Fridge fridge : fridges) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(fridge.getName()));
+            filterByDoors(models, numberOfDoor);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(fridge, models));
+            }
+        }
+        return result;
     }
 
     @Override
-    public Fridge findAvailabilityByNameAndDoorsAndCompressor(String deviceName, int numberOfDoor,
-            String compressor, boolean availability) {
-        checkDeviceExists(deviceName);
-        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
-        filterByDoors(models, numberOfDoor);
-        filterByCompressor(models, compressor);
-        if (Boolean.TRUE.equals(availability)) {
-            filterByAvailability(models);
+    public List<Fridge> findAllByCompressor(String compressor) {
+        List<Fridge> fridges = fridgeDao.findAll();
+        List<Fridge> result = new ArrayList<>();
+        for (Fridge fridge : fridges) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(fridge.getName()));
+            filterByCompressor(models, compressor);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(fridge, models));
+            }
         }
-        return createResultDevice(fridgeDao.findByNameIgnoreCase(deviceName).get(), models);
+        return result;
     }
 
     private void filterByDoors(List<Model> models, int numberOfDoor) {
@@ -57,14 +73,6 @@ public class FridgeServiceImpl extends DeviceServiceImpl<Fridge, FridgeModel> im
                 if (!fridgeModel.getCompressor().equals(compressor)) {
                     models.remove(model);
                 }
-            }
-        }
-    }
-
-    private void filterByAvailability(List<Model> models) {
-        for (Model model : new ArrayList<>(models)) {
-            if (Boolean.FALSE.equals(model.getAvailability())) {
-                models.remove(model);
             }
         }
     }

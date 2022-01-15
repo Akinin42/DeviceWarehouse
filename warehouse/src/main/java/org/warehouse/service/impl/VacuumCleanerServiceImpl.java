@@ -14,6 +14,7 @@ import org.warehouse.entity.device.VacuumCleaner;
 import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.entity.devicemodel.VacuumCleanerModel;
 import org.warehouse.service.VacuumCleanerService;
+import org.warehouse.util.DeviceSorter;
 
 @Service
 @Transactional
@@ -21,22 +22,37 @@ public class VacuumCleanerServiceImpl extends DeviceServiceImpl<VacuumCleaner, V
 
     protected final VacuumCleanerDao vacuumCleanerDao;
 
-    public VacuumCleanerServiceImpl(VacuumCleanerDao vacuumCleanerDao) {
-        super(vacuumCleanerDao);
+    public VacuumCleanerServiceImpl(VacuumCleanerDao vacuumCleanerDao, DeviceSorter<VacuumCleaner> deviceSorter) {
+        super(vacuumCleanerDao, deviceSorter);
         this.vacuumCleanerDao = vacuumCleanerDao;
     }
     
     @Override
-    public VacuumCleaner findAvailabilityByNameAndAmountAndModes(String deviceName, int amountLitres,
-            int numberOfModes, boolean availability) {
-        checkDeviceExists(deviceName);
-        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
-        filterByAmount(models, amountLitres);
-        filterByModes(models, numberOfModes);
-        if (Boolean.TRUE.equals(availability)) {
-            filterByAvailability(models);
+    public List<VacuumCleaner> findAllByAmount(int amountLitres) {
+        List<VacuumCleaner> vacuumCleaners = vacuumCleanerDao.findAll();
+        List<VacuumCleaner> result = new ArrayList<>();
+        for (VacuumCleaner vacuumCleaner : vacuumCleaners) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(vacuumCleaner.getName()));
+            filterByAmount(models, amountLitres);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(vacuumCleaner, models));
+            }
         }
-        return createResultDevice(vacuumCleanerDao.findByNameIgnoreCase(deviceName).get(), models);
+        return result;
+    }
+
+    @Override
+    public List<VacuumCleaner> findAllByModes(int numberOfModes) {
+        List<VacuumCleaner> vacuumCleaners = vacuumCleanerDao.findAll();
+        List<VacuumCleaner> result = new ArrayList<>();
+        for (VacuumCleaner vacuumCleaner : vacuumCleaners) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(vacuumCleaner.getName()));
+            filterByModes(models, numberOfModes);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(vacuumCleaner, models));
+            }
+        }
+        return result;
     }
     
     private void filterByAmount(List<Model> models, int amountLitres) {
@@ -58,14 +74,6 @@ public class VacuumCleanerServiceImpl extends DeviceServiceImpl<VacuumCleaner, V
             }
         }
     }
-
-    private void filterByAvailability(List<Model> models) {
-        for (Model model : new ArrayList<>(models)) {
-            if (Boolean.FALSE.equals(model.getAvailability())) {
-                models.remove(model);
-            }
-        }
-    }    
 
     @Override
     protected VacuumCleaner mapDtoToEntity(DeviceDto deviceDto) {

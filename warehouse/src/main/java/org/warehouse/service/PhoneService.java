@@ -1,10 +1,13 @@
 package org.warehouse.service;
 
+import java.util.List;
+
 import org.warehouse.entity.device.Phone;
 import org.warehouse.entity.devicemodel.PhoneModel;
 
 public interface PhoneService extends DeviceService<Phone, PhoneModel> {
 
-    Phone findAvailabilityByNameAndMemoryAndCameras(String deviceName, int memory,
-            int numberOfCameras, boolean availability);
+    List<Phone> findAllByMemory(int memory);
+    
+    List<Phone> findAllByCameras(int numberOfCameras);
 }

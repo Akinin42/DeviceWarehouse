@@ -1,10 +1,13 @@
 package org.warehouse.service;
 
+import java.util.List;
+
 import org.warehouse.entity.device.VacuumCleaner;
 import org.warehouse.entity.devicemodel.VacuumCleanerModel;
 
 public interface VacuumCleanerService extends DeviceService<VacuumCleaner, VacuumCleanerModel> {
 
-    VacuumCleaner findAvailabilityByNameAndAmountAndModes(String deviceName, int amountLitres,
-            int numberOfModes, boolean availability);
+    List<VacuumCleaner> findAllByAmount(int amountLitres);
+
+    List<VacuumCleaner> findAllByModes(int numberOfModes);
 }

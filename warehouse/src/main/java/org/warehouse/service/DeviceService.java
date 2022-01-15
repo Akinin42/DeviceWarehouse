@@ -11,9 +11,13 @@ public interface DeviceService<E, T> {
     
     E findByName(String deviceName);
 
-    List<E> findAllDevices();
+    List<E> findAllDevices();    
+  
+    List<E> findAllByColor(String color);
     
-    E findByNameAndColorAndCost(String deviceName, String color, int minCost, int maxCost);
+    List<E> findAllByCost(int minCost, int maxCost);
+    
+    List<E> findAllByAvailability();
 
     void addModelForDevice(String deviceName, ModelDto modelDto);
 }

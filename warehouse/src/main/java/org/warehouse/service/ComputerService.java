@@ -1,10 +1,13 @@
 package org.warehouse.service;
 
+import java.util.List;
+
 import org.warehouse.entity.device.Computer;
 import org.warehouse.entity.devicemodel.ComputerModel;
 
 public interface ComputerService extends DeviceService<Computer, ComputerModel> {
 
-    Computer findAvailabilityByNameAndCategoryAndProcessor(String deviceName, String category,
-            String processor, boolean availability);
+    List<Computer> findAllByCategory(String category);
+    
+    List<Computer> findAllByProcessor(String processor);
 }

@@ -13,6 +13,7 @@ import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.exception.EntityAlreadyExistException;
 import org.warehouse.exception.EntityNotExistException;
 import org.warehouse.service.DeviceService;
+import org.warehouse.util.DeviceSorter;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class DeviceServiceImpl<E extends Device, T extends Model> implements DeviceService<E, T> {
 
     private final DeviceDao<E> deviceDao;
+    private final DeviceSorter<E> deviceSorter;
 
     @Override
     public void addDevice(DeviceDto deviceDto) {
@@ -47,12 +49,45 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
     }
 
     @Override
-    public E findByNameAndColorAndCost(String deviceName, String color, int minCost, int maxCost) {
-        checkDeviceExists(deviceName);
-        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
-        filterByColor(models, color);
-        filterByCost(models, minCost, maxCost);
-        return createResultDevice(deviceDao.findByNameIgnoreCase(deviceName).get(), models);
+    public List<E> findAllByColor(String color) {
+        List<E> devices = deviceDao.findAll();
+        List<E> result = new ArrayList<>();
+        for (E device : devices) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(device.getName()));
+            filterByColor(models, color);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(device, models));
+            }
+        }
+        return result;
+    }
+    
+    @Override
+    public List<E> findAllByCost(int minCost, int maxCost) {
+        List<E> devices = deviceDao.findAll();
+        List<E> result = new ArrayList<>();
+        for (E device : devices) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(device.getName()));
+            filterByCost(models, minCost, maxCost);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(device, models));
+            }
+        }
+        return deviceSorter.sortByCost(result);
+    }
+    
+    @Override
+    public List<E> findAllByAvailability() {
+        List<E> devices = deviceDao.findAll();
+        List<E> result = new ArrayList<>();
+        for (E device : devices) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(device.getName()));
+            filterByAvailability(models);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(device, models));
+            }
+        }
+        return result;
     }
 
     private void filterByColor(List<Model> models, String color) {
@@ -68,6 +103,14 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
     private void filterByCost(List<Model> models, int minCost, int maxCost) {
         for (Model model : new ArrayList<>(models)) {
             if (model.getCost() < minCost || (model.getCost() > maxCost && maxCost != 0)) {
+                models.remove(model);
+            }
+        }
+    }
+    
+    private void filterByAvailability(List<Model> models) {
+        for (Model model : new ArrayList<>(models)) {
+            if (Boolean.FALSE.equals(model.getAvailability())) {
                 models.remove(model);
             }
         }

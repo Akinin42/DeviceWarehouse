@@ -18,11 +18,13 @@ import org.warehouse.dto.VacuumCleanerModelDto;
 import org.warehouse.entity.device.VacuumCleaner;
 import org.warehouse.service.VacuumCleanerService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/vacuum")
+@Tag(name = "Vacuum cleaners", description = "adding, search and sorting vacuum cleaners")
 public class VacuumCleanerController {
 
     private final VacuumCleanerService vacuumCleanerService;
@@ -37,19 +39,30 @@ public class VacuumCleanerController {
         return vacuumCleanerService.findByName(deviceName);
     }
 
-    @GetMapping(value = "/{name}", params = { "color", "minCost", "maxCost" })
-    public VacuumCleaner findVacuumCleanerByNameAndColorAndCost(@PathVariable("name") String deviceName,
-            @RequestParam("color") String colour, @RequestParam("minCost") int minCost,
+    @GetMapping(value = "/sortcolor/{color}")
+    public List<VacuumCleaner> findAllVacuumCleanersByColor(@PathVariable("color") String color) {
+        return vacuumCleanerService.findAllByColor(color);
+    }
+
+    @GetMapping(value = "/sortcost")
+    public List<VacuumCleaner> findAllVacuumCleanersByCost(@RequestParam("minCost") int minCost,
             @RequestParam("maxCost") int maxCost) {
-        return vacuumCleanerService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
+        return vacuumCleanerService.findAllByCost(minCost, maxCost);
+    }
+
+    @GetMapping(value = "/availability")
+    public List<VacuumCleaner> findAllVacuumCleanersByAvailability() {
+        return vacuumCleanerService.findAllByAvailability();
     }
     
-    @GetMapping(value = "/{name}", params = { "amount", "modes", "availability" })
-    public VacuumCleaner findAvailabilityVacuumCleanerByAmountAndModes(@PathVariable("name") String deviceName,
-            @RequestParam("amount") int amount, @RequestParam("modes") int numberOfModes,
-            @RequestParam("availability") boolean availability) {
-        return vacuumCleanerService.findAvailabilityByNameAndAmountAndModes(deviceName, amount, numberOfModes,
-                availability);
+    @GetMapping(value = "/sortamount/{amount}")
+    public List<VacuumCleaner> findAllVacuumCleanersByAmount(@PathVariable("amount") int amount) {
+        return vacuumCleanerService.findAllByAmount(amount);
+    }
+    
+    @GetMapping(value = "/sortmodes/{modes}")
+    public List<VacuumCleaner> findAllVacuumCleanersByModes(@PathVariable("modes") int modes) {
+        return vacuumCleanerService.findAllByModes(modes);
     }
 
     @PostMapping

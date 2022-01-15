@@ -14,6 +14,7 @@ import org.warehouse.entity.device.Phone;
 import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.entity.devicemodel.PhoneModel;
 import org.warehouse.service.PhoneService;
+import org.warehouse.util.DeviceSorter;
 
 @Service
 @Transactional
@@ -21,22 +22,37 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
 
     protected final PhoneDao phoneDao;
 
-    public PhoneServiceImpl(PhoneDao phoneDao) {
-        super(phoneDao);
+    public PhoneServiceImpl(PhoneDao phoneDao, DeviceSorter<Phone> deviceSorter) {
+        super(phoneDao, deviceSorter);
         this.phoneDao = phoneDao;
+    }
+    
+    @Override
+    public List<Phone> findAllByMemory(int memory) {
+        List<Phone> phones = phoneDao.findAll();
+        List<Phone> result = new ArrayList<>();
+        for (Phone phone : phones) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(phone.getName()));
+            filterByMemory(models, memory);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(phone, models));
+            }
+        }
+        return result;
     }
 
     @Override
-    public Phone findAvailabilityByNameAndMemoryAndCameras(String deviceName, int memory, int numberOfCameras,
-            boolean availability) {
-        checkDeviceExists(deviceName);
-        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
-        filterByMemory(models, memory);
-        filterByCameras(models, numberOfCameras);
-        if (Boolean.TRUE.equals(availability)) {
-            filterByAvailability(models);
+    public List<Phone> findAllByCameras(int numberOfCameras) {
+        List<Phone> phones = phoneDao.findAll();
+        List<Phone> result = new ArrayList<>();
+        for (Phone phone : phones) {
+            List<Model> models = new ArrayList<>(getModelsForDevice(phone.getName()));
+            filterByCameras(models, numberOfCameras);
+            if (!models.isEmpty()) {
+                result.add(createResultDevice(phone, models));
+            }
         }
-        return createResultDevice(phoneDao.findByNameIgnoreCase(deviceName).get(), models);
+        return result;
     }
 
     private void filterByMemory(List<Model> models, int memory) {
@@ -54,14 +70,6 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
         for (Model model : new ArrayList<>(models)) {
             PhoneModel phoneModel = (PhoneModel) model;
             if (phoneModel.getNumberCameras() < numberOfCameras) {
-                models.remove(model);
-            }
-        }
-    }
-
-    private void filterByAvailability(List<Model> models) {
-        for (Model model : new ArrayList<>(models)) {
-            if (Boolean.FALSE.equals(model.getAvailability())) {
                 models.remove(model);
             }
         }

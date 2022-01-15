@@ -18,11 +18,13 @@ import org.warehouse.dto.FridgeModelDto;
 import org.warehouse.entity.device.Fridge;
 import org.warehouse.service.FridgeService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/fridges")
+@Tag(name = "Fridges", description = "adding, search and sorting fridges")
 public class FridgeController {
 
     private final FridgeService fridgeService;
@@ -37,19 +39,30 @@ public class FridgeController {
         return fridgeService.findByName(deviceName);
     }
 
-    @GetMapping(value = "/{name}", params = { "color", "minCost", "maxCost" })
-    public Fridge findFridgeByNameAndColorAndCost(@PathVariable("name") String deviceName,
-            @RequestParam("color") String colour, @RequestParam("minCost") int minCost,
-            @RequestParam("maxCost") int maxCost) {
-        return fridgeService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
+    @GetMapping(value = "/sortcolor/{color}")
+    public List<Fridge> findAllFridgesByColor(@PathVariable("color") String color) {
+        return fridgeService.findAllByColor(color);
     }
 
-    @GetMapping(value = "/{name}", params = { "door", "compressor", "availability" })
-    public Fridge findAvailabilityFridgeByDoorsAndCompressor(@PathVariable("name") String deviceName,
-            @RequestParam("door") int numberOfDoor, @RequestParam("compressor") String compressor,
-            @RequestParam("availability") boolean availability) {
-        return fridgeService.findAvailabilityByNameAndDoorsAndCompressor(deviceName, numberOfDoor, compressor,
-                availability);
+    @GetMapping(value = "/sortcost")
+    public List<Fridge> findAllFridgesByCost(@RequestParam("minCost") int minCost,
+            @RequestParam("maxCost") int maxCost) {
+        return fridgeService.findAllByCost(minCost, maxCost);
+    }
+
+    @GetMapping(value = "/availability")
+    public List<Fridge> findAllFridgesByAvailability() {
+        return fridgeService.findAllByAvailability();
+    }
+    
+    @GetMapping(value = "/sortdoor/{door}")
+    public List<Fridge> findAllFridgesByDoors(@PathVariable("door") int numberOfDoor) {
+        return fridgeService.findAllByDoors(numberOfDoor);
+    }
+    
+    @GetMapping(value = "/sortcompressor/{compressor}")
+    public List<Fridge> findAllFridgesByCompressor(@PathVariable("compressor") String compressor) {
+        return fridgeService.findAllByCompressor(compressor);
     }
 
     @PostMapping
