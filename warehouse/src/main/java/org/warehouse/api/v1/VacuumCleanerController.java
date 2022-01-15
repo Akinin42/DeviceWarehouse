@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.VacuumCleanerModelDto;
-import org.warehouse.entity.VacuumCleaner;
+import org.warehouse.entity.device.VacuumCleaner;
 import org.warehouse.service.VacuumCleanerService;
 
 import lombok.AllArgsConstructor;

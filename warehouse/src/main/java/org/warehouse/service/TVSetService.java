@@ -2,8 +2,8 @@ package org.warehouse.service;
 
 import java.util.Optional;
 
-import org.warehouse.entity.TVSet;
-import org.warehouse.entity.TVSetModel;
+import org.warehouse.entity.device.TVSet;
+import org.warehouse.entity.devicemodel.TVSetModel;
 
 public interface TVSetService extends DeviceService<TVSet, TVSetModel> {
 

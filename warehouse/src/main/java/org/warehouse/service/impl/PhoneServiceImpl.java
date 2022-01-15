@@ -10,10 +10,10 @@ import org.warehouse.dao.PhoneDao;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.ModelDto;
 import org.warehouse.dto.PhoneModelDto;
-import org.warehouse.entity.Model;
-import org.warehouse.entity.Phone;
-import org.warehouse.entity.PhoneModel;
 import org.warehouse.entity.Size;
+import org.warehouse.entity.device.Phone;
+import org.warehouse.entity.devicemodel.Model;
+import org.warehouse.entity.devicemodel.PhoneModel;
 import org.warehouse.service.PhoneService;
 
 @Service

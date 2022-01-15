@@ -2,7 +2,7 @@ package org.warehouse.service;
 
 import java.util.List;
 
-import org.warehouse.entity.Device;
+import org.warehouse.entity.device.Device;
 
 public interface WarehouseService {
     

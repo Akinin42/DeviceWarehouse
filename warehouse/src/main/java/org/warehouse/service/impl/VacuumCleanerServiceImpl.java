@@ -10,10 +10,10 @@ import org.warehouse.dao.VacuumCleanerDao;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.ModelDto;
 import org.warehouse.dto.VacuumCleanerModelDto;
-import org.warehouse.entity.Model;
 import org.warehouse.entity.Size;
-import org.warehouse.entity.VacuumCleaner;
-import org.warehouse.entity.VacuumCleanerModel;
+import org.warehouse.entity.device.VacuumCleaner;
+import org.warehouse.entity.devicemodel.Model;
+import org.warehouse.entity.devicemodel.VacuumCleanerModel;
 import org.warehouse.service.VacuumCleanerService;
 
 @Service

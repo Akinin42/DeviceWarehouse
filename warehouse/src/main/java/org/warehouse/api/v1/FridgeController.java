@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.FridgeModelDto;
-import org.warehouse.entity.Fridge;
+import org.warehouse.entity.device.Fridge;
 import org.warehouse.service.FridgeService;
 
 import lombok.AllArgsConstructor;

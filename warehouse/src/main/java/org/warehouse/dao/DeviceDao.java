@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.warehouse.entity.Device;
+import org.warehouse.entity.device.Device;
 
 @Repository
 public interface DeviceDao <E extends Device> extends JpaRepository<E, Integer> {

@@ -10,10 +10,10 @@ import org.warehouse.dao.FridgeDao;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.FridgeModelDto;
 import org.warehouse.dto.ModelDto;
-import org.warehouse.entity.Fridge;
-import org.warehouse.entity.FridgeModel;
-import org.warehouse.entity.Model;
 import org.warehouse.entity.Size;
+import org.warehouse.entity.device.Fridge;
+import org.warehouse.entity.devicemodel.FridgeModel;
+import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.service.FridgeService;
 
 @Service

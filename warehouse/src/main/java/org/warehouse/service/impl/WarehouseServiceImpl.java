@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.warehouse.dao.DeviceDao;
-import org.warehouse.entity.Device;
-import org.warehouse.entity.Model;
+import org.warehouse.entity.device.Device;
+import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.service.WarehouseService;
 
 import lombok.AllArgsConstructor;

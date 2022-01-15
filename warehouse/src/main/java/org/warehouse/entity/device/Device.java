@@ -1,4 +1,6 @@
-package org.warehouse.entity;
+package org.warehouse.entity.device;
+
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,7 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+
+import org.warehouse.entity.devicemodel.Model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,21 +33,29 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @EqualsAndHashCode
-public abstract class Model {
-    
+public abstract class Device {
+
     @Id
-    @Column(name = "model_id")
+    @Column(name = "device_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-    
+
     private String name;
-    private String serialNumber;
-    private String color;
-    
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "size_id")
-    private Size size;
-    
-    private Integer cost;
-    private Boolean availability;
+    private String countryOfManufacture;
+    private String company;
+    private Boolean onlineOrder;
+    private Boolean installment;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "models_to_devices", joinColumns = @JoinColumn(name = "device_id"),
+        inverseJoinColumns = @JoinColumn(name = "model_id"))
+    private List<Model> models;
+
+    public void addModel(Model model) {
+        this.models.add(model);
+    }
+
+    public void removeModel(Model model) {
+        this.models.remove(model);
+    }
 }

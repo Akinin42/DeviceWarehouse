@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.warehouse.entity.Device;
+import org.warehouse.entity.device.Device;
 import org.warehouse.service.WarehouseService;
 
 import lombok.AllArgsConstructor;

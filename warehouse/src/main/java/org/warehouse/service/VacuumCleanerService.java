@@ -2,8 +2,8 @@ package org.warehouse.service;
 
 import java.util.Optional;
 
-import org.warehouse.entity.VacuumCleaner;
-import org.warehouse.entity.VacuumCleanerModel;
+import org.warehouse.entity.device.VacuumCleaner;
+import org.warehouse.entity.devicemodel.VacuumCleanerModel;
 
 public interface VacuumCleanerService extends DeviceService<VacuumCleaner, VacuumCleanerModel> {
 

@@ -1,5 +1,6 @@
-package org.warehouse.entity;
+package org.warehouse.entity.devicemodel;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -12,15 +13,17 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "tvset_models")
+@Table(name = "fridge_models")
 @SuperBuilder(setterPrefix = "with")
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class TVSetModel extends Model {
+public class FridgeModel extends Model {
     
-    private String category;
-    private String technology;
+    @Column(length = 2)
+    private Integer numberOfDoor;    
+    
+    private String compressor;
 }

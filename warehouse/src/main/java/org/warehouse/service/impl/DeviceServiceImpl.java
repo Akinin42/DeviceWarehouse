@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.warehouse.dao.DeviceDao;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.ModelDto;
-import org.warehouse.entity.Device;
-import org.warehouse.entity.Model;
+import org.warehouse.entity.device.Device;
+import org.warehouse.entity.devicemodel.Model;
 import org.warehouse.service.DeviceService;
 
 import lombok.AllArgsConstructor;

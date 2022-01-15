@@ -2,8 +2,8 @@ package org.warehouse.service;
 
 import java.util.Optional;
 
-import org.warehouse.entity.Phone;
-import org.warehouse.entity.PhoneModel;
+import org.warehouse.entity.device.Phone;
+import org.warehouse.entity.devicemodel.PhoneModel;
 
 public interface PhoneService extends DeviceService<Phone, PhoneModel> {
 

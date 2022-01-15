@@ -6,39 +6,39 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.warehouse.dao.TVSetDao;
+import org.warehouse.dao.ComputerDao;
+import org.warehouse.dto.ComputerModelDto;
 import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.ModelDto;
-import org.warehouse.dto.TVSetModelDto;
 import org.warehouse.entity.Size;
-import org.warehouse.entity.device.TVSet;
+import org.warehouse.entity.device.Computer;
+import org.warehouse.entity.devicemodel.ComputerModel;
 import org.warehouse.entity.devicemodel.Model;
-import org.warehouse.entity.devicemodel.TVSetModel;
-import org.warehouse.service.TVSetService;
+import org.warehouse.service.ComputerService;
 
 @Service
 @Transactional
-public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> implements TVSetService {
+public class ComputerServiceImpl extends DeviceServiceImpl<Computer, ComputerModel> implements ComputerService {
 
-    protected final TVSetDao tvsetDao;
+    protected final ComputerDao computerDao;
 
-    public TVSetServiceImpl(TVSetDao tvsetDao) {
-        super(tvsetDao);
-        this.tvsetDao = tvsetDao;
+    public ComputerServiceImpl(ComputerDao computerDao) {
+        super(computerDao);
+        this.computerDao = computerDao;
     }
 
     @Override
-    public Optional<TVSet> findAvailabilityByNameAndCategoryAndTechnology(String deviceName, String category,
-            String technology, boolean availability) {
-        TVSet result = null;
-        if (tvsetDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            List<Model> models = new ArrayList<>(tvsetDao.findByNameIgnoreCase(deviceName).get().getModels());
+    public Optional<Computer> findAvailabilityByNameAndCategoryAndProcessor(String deviceName, String category,
+            String processor, boolean availability) {
+        Computer result = null;
+        if (computerDao.findByNameIgnoreCase(deviceName).isPresent()) {
+            List<Model> models = new ArrayList<>(computerDao.findByNameIgnoreCase(deviceName).get().getModels());
             filterByCategory(models, category);
-            filterByTechnology(models, technology);
+            filterByProcessor(models, processor);
             if (Boolean.TRUE.equals(availability)) {
                 filterByAvailability(models);
             }
-            result = createResultDevice(tvsetDao.findByNameIgnoreCase(deviceName).get(), models);
+            result = createResultDevice(computerDao.findByNameIgnoreCase(deviceName).get(), models);
         }
         return Optional.ofNullable(result);
     }
@@ -46,19 +46,19 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
     private void filterByCategory(List<Model> models, String category) {
         if (category != null && !category.isEmpty()) {
             for (Model model : new ArrayList<>(models)) {
-                TVSetModel tvsetModel = (TVSetModel) model;
-                if (!tvsetModel.getCategory().equals(category)) {
+                ComputerModel computerModel = (ComputerModel) model;
+                if (!computerModel.getCategory().equals(category)) {
                     models.remove(model);
                 }
             }
         }
     }
 
-    private void filterByTechnology(List<Model> models, String technology) {
-        if (technology != null && !technology.isEmpty()) {
+    private void filterByProcessor(List<Model> models, String processor) {
+        if (processor != null && !processor.isEmpty()) {
             for (Model model : new ArrayList<>(models)) {
-                TVSetModel tvsetModel = (TVSetModel) model;
-                if (!tvsetModel.getTechnology().equals(technology)) {
+                ComputerModel computerModel = (ComputerModel) model;
+                if (!computerModel.getProcessor().equals(processor)) {
                     models.remove(model);
                 }
             }
@@ -74,8 +74,8 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
     }
 
     @Override
-    protected TVSet mapDtoToEntity(DeviceDto deviceDto) {
-        return TVSet.builder()
+    protected Computer mapDtoToEntity(DeviceDto deviceDto) {
+        return Computer.builder()
                 .withId(deviceDto.getId())
                 .withName(deviceDto.getName())
                 .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
@@ -86,14 +86,14 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
     }
 
     @Override
-    protected TVSetModel mapModelDtoToEntity(ModelDto modelDto) {
-        TVSetModelDto tvsetModelDto = (TVSetModelDto) modelDto;
+    protected ComputerModel mapModelDtoToEntity(ModelDto modelDto) {
+        ComputerModelDto tvsetModelDto = (ComputerModelDto) modelDto;
         Size size = Size.builder()
                 .withLengthMm(modelDto.getLengthMm())
                 .withWidthMm(modelDto.getWidthMm())
                 .withHeightMm(modelDto.getHeightMm())
                 .build();
-        return TVSetModel.builder()
+        return ComputerModel.builder()
                 .withId(tvsetModelDto.getId())
                 .withName(tvsetModelDto.getName())
                 .withSerialNumber(tvsetModelDto.getSerialNumber())
@@ -102,13 +102,13 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
                 .withCost(tvsetModelDto.getCost())
                 .withAvailability(tvsetModelDto.getAvailability())
                 .withCategory(tvsetModelDto.getCategory())
-                .withTechnology(tvsetModelDto.getTechnology())
+                .withProcessor(tvsetModelDto.getProcessor())
                 .build();
     }
 
     @Override
-    protected TVSet createResultDevice(TVSet device, List<Model> models) {
-        return TVSet.builder()
+    protected Computer createResultDevice(Computer device, List<Model> models) {
+        return Computer.builder()
                 .withId(device.getId())
                 .withName(device.getName())
                 .withCountryOfManufacture(device.getCountryOfManufacture())
