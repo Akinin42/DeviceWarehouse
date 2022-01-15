@@ -1,7 +1,6 @@
 package org.warehouse.api.v1;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -34,19 +33,19 @@ public class TVSetController {
     }
 
     @GetMapping("/{name}")
-    public Optional<TVSet> findTVSet(@PathVariable("name") String deviceName) {
+    public TVSet findTVSet(@PathVariable("name") String deviceName) {
         return tvsetService.findByName(deviceName);
     }
 
     @GetMapping(value = "/{name}", params = { "color", "minCost", "maxCost" })
-    public Optional<TVSet> findTVSetByNameAndColorAndCost(@PathVariable("name") String deviceName,
+    public TVSet findTVSetByNameAndColorAndCost(@PathVariable("name") String deviceName,
             @RequestParam("color") String colour, @RequestParam("minCost") int minCost,
             @RequestParam("maxCost") int maxCost) {
         return tvsetService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
     }
 
     @GetMapping(value = "/{name}", params = { "category", "technology", "availability" })
-    public Optional<TVSet> findAvailabilityTVSetByCategoryAndTechnology(@PathVariable("name") String deviceName,
+    public TVSet findAvailabilityTVSetByCategoryAndTechnology(@PathVariable("name") String deviceName,
             @RequestParam("category") String category, @RequestParam("technology") String technology,
             @RequestParam("availability") boolean availability) {
         return tvsetService.findAvailabilityByNameAndCategoryAndTechnology(deviceName, category, technology,

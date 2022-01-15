@@ -2,7 +2,6 @@ package org.warehouse.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +27,16 @@ public class ComputerServiceImpl extends DeviceServiceImpl<Computer, ComputerMod
     }
 
     @Override
-    public Optional<Computer> findAvailabilityByNameAndCategoryAndProcessor(String deviceName, String category,
+    public Computer findAvailabilityByNameAndCategoryAndProcessor(String deviceName, String category,
             String processor, boolean availability) {
-        Computer result = null;
-        if (computerDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            List<Model> models = new ArrayList<>(computerDao.findByNameIgnoreCase(deviceName).get().getModels());
-            filterByCategory(models, category);
-            filterByProcessor(models, processor);
-            if (Boolean.TRUE.equals(availability)) {
-                filterByAvailability(models);
-            }
-            result = createResultDevice(computerDao.findByNameIgnoreCase(deviceName).get(), models);
+        checkDeviceExists(deviceName);
+        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
+        filterByCategory(models, category);
+        filterByProcessor(models, processor);
+        if (Boolean.TRUE.equals(availability)) {
+            filterByAvailability(models);
         }
-        return Optional.ofNullable(result);
+        return createResultDevice(computerDao.findByNameIgnoreCase(deviceName).get(), models);
     }
 
     private void filterByCategory(List<Model> models, String category) {

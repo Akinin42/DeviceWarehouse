@@ -1,7 +1,6 @@
 package org.warehouse.api.v1;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -34,19 +33,19 @@ public class ComputerController {
     }
 
     @GetMapping("/{name}")
-    public Optional<Computer> findComputer(@PathVariable("name") String deviceName) {
+    public Computer findComputer(@PathVariable("name") String deviceName) {
         return computerService.findByName(deviceName);
     }
 
     @GetMapping(value = "/{name}", params = { "color", "minCost", "maxCost" })
-    public Optional<Computer> findComputerByNameAndColorAndCost(@PathVariable("name") String deviceName,
+    public Computer findComputerByNameAndColorAndCost(@PathVariable("name") String deviceName,
             @RequestParam("color") String colour, @RequestParam("minCost") int minCost,
             @RequestParam("maxCost") int maxCost) {
         return computerService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
     }
 
     @GetMapping(value = "/{name}", params = { "category", "processor", "availability" })
-    public Optional<Computer> findAvailabilityComputerByCategoryAndProcessor(@PathVariable("name") String deviceName,
+    public Computer findAvailabilityComputerByCategoryAndProcessor(@PathVariable("name") String deviceName,
             @RequestParam("category") String category, @RequestParam("processor") String processor,
             @RequestParam("availability") boolean availability) {
         return computerService.findAvailabilityByNameAndCategoryAndProcessor(deviceName, category, processor,

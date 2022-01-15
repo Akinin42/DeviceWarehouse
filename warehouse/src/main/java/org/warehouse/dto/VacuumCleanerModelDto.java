@@ -1,5 +1,8 @@
 package org.warehouse.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -16,6 +19,9 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class VacuumCleanerModelDto extends ModelDto {
 
+    @Positive
     private Integer amountLitres;
+    
+    @Min(0)
     private Integer numberModes;
 }

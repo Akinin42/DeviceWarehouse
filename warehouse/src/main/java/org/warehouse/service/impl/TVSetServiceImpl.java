@@ -2,7 +2,6 @@ package org.warehouse.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +27,16 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
     }
 
     @Override
-    public Optional<TVSet> findAvailabilityByNameAndCategoryAndTechnology(String deviceName, String category,
+    public TVSet findAvailabilityByNameAndCategoryAndTechnology(String deviceName, String category,
             String technology, boolean availability) {
-        TVSet result = null;
-        if (tvsetDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            List<Model> models = new ArrayList<>(tvsetDao.findByNameIgnoreCase(deviceName).get().getModels());
-            filterByCategory(models, category);
-            filterByTechnology(models, technology);
-            if (Boolean.TRUE.equals(availability)) {
-                filterByAvailability(models);
-            }
-            result = createResultDevice(tvsetDao.findByNameIgnoreCase(deviceName).get(), models);
+        checkDeviceExists(deviceName);
+        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
+        filterByCategory(models, category);
+        filterByTechnology(models, technology);
+        if (Boolean.TRUE.equals(availability)) {
+            filterByAvailability(models);
         }
-        return Optional.ofNullable(result);
+        return createResultDevice(tvsetDao.findByNameIgnoreCase(deviceName).get(), models);
     }
 
     private void filterByCategory(List<Model> models, String category) {

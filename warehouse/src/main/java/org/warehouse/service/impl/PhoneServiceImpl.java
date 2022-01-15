@@ -2,7 +2,6 @@ package org.warehouse.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +27,16 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
     }
 
     @Override
-    public Optional<Phone> findAvailabilityByNameAndMemoryAndCameras(String deviceName, int memory, int numberOfCameras,
+    public Phone findAvailabilityByNameAndMemoryAndCameras(String deviceName, int memory, int numberOfCameras,
             boolean availability) {
-        Phone result = null;
-        if (phoneDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            List<Model> models = new ArrayList<>(phoneDao.findByNameIgnoreCase(deviceName).get().getModels());
-            filterByMemory(models, memory);
-            filterByCameras(models, numberOfCameras);
-            if (Boolean.TRUE.equals(availability)) {
-                filterByAvailability(models);
-            }
-            result = createResultDevice(phoneDao.findByNameIgnoreCase(deviceName).get(), models);
+        checkDeviceExists(deviceName);
+        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
+        filterByMemory(models, memory);
+        filterByCameras(models, numberOfCameras);
+        if (Boolean.TRUE.equals(availability)) {
+            filterByAvailability(models);
         }
-        return Optional.ofNullable(result);
+        return createResultDevice(phoneDao.findByNameIgnoreCase(deviceName).get(), models);
     }
 
     private void filterByMemory(List<Model> models, int memory) {

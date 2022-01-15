@@ -1,7 +1,6 @@
 package org.warehouse.api.v1;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -34,19 +33,19 @@ public class VacuumCleanerController {
     }
 
     @GetMapping("/{name}")
-    public Optional<VacuumCleaner> findVacuumCleaner(@PathVariable("name") String deviceName) {
+    public VacuumCleaner findVacuumCleaner(@PathVariable("name") String deviceName) {
         return vacuumCleanerService.findByName(deviceName);
     }
 
     @GetMapping(value = "/{name}", params = { "color", "minCost", "maxCost" })
-    public Optional<VacuumCleaner> findVacuumCleanerByNameAndColorAndCost(@PathVariable("name") String deviceName,
+    public VacuumCleaner findVacuumCleanerByNameAndColorAndCost(@PathVariable("name") String deviceName,
             @RequestParam("color") String colour, @RequestParam("minCost") int minCost,
             @RequestParam("maxCost") int maxCost) {
         return vacuumCleanerService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
     }
     
     @GetMapping(value = "/{name}", params = { "amount", "modes", "availability" })
-    public Optional<VacuumCleaner> findAvailabilityVacuumCleanerByAmountAndModes(@PathVariable("name") String deviceName,
+    public VacuumCleaner findAvailabilityVacuumCleanerByAmountAndModes(@PathVariable("name") String deviceName,
             @RequestParam("amount") int amount, @RequestParam("modes") int numberOfModes,
             @RequestParam("availability") boolean availability) {
         return vacuumCleanerService.findAvailabilityByNameAndAmountAndModes(deviceName, amount, numberOfModes,

@@ -2,7 +2,6 @@ package org.warehouse.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +27,16 @@ public class FridgeServiceImpl extends DeviceServiceImpl<Fridge, FridgeModel> im
     }
 
     @Override
-    public Optional<Fridge> findAvailabilityByNameAndDoorsAndCompressor(String deviceName, int numberOfDoor,
+    public Fridge findAvailabilityByNameAndDoorsAndCompressor(String deviceName, int numberOfDoor,
             String compressor, boolean availability) {
-        Fridge result = null;
-        if (fridgeDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            List<Model> models = new ArrayList<>(fridgeDao.findByNameIgnoreCase(deviceName).get().getModels());
-            filterByDoors(models, numberOfDoor);
-            filterByCompressor(models, compressor);
-            if (Boolean.TRUE.equals(availability)) {
-                filterByAvailability(models);
-            }
-            result = createResultDevice(fridgeDao.findByNameIgnoreCase(deviceName).get(), models);
+        checkDeviceExists(deviceName);
+        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
+        filterByDoors(models, numberOfDoor);
+        filterByCompressor(models, compressor);
+        if (Boolean.TRUE.equals(availability)) {
+            filterByAvailability(models);
         }
-        return Optional.ofNullable(result);
+        return createResultDevice(fridgeDao.findByNameIgnoreCase(deviceName).get(), models);
     }
 
     private void filterByDoors(List<Model> models, int numberOfDoor) {

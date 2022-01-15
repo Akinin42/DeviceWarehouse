@@ -1,7 +1,6 @@
 package org.warehouse.api.v1;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -34,19 +33,19 @@ public class PhoneController {
     }
 
     @GetMapping("/{name}")
-    public Optional<Phone> findPhone(@PathVariable("name") String deviceName) {
+    public Phone findPhone(@PathVariable("name") String deviceName) {
         return phoneService.findByName(deviceName);
     }
 
     @GetMapping(value = "/{name}", params = { "color", "minCost", "maxCost" })
-    public Optional<Phone> findPhoneByNameAndColorAndCost(@PathVariable("name") String deviceName,
+    public Phone findPhoneByNameAndColorAndCost(@PathVariable("name") String deviceName,
             @RequestParam("color") String colour, @RequestParam("minCost") int minCost,
             @RequestParam("maxCost") int maxCost) {
         return phoneService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
     }
 
     @GetMapping(value = "/{name}", params = { "memory", "cameras", "availability" })
-    public Optional<Phone> findAvailabilityPhoneByMemoryAndCameras(@PathVariable("name") String deviceName,
+    public Phone findAvailabilityPhoneByMemoryAndCameras(@PathVariable("name") String deviceName,
             @RequestParam("memory") int memory, @RequestParam("cameras") int numberOfCameras,
             @RequestParam("availability") boolean availability) {
         return phoneService.findAvailabilityByNameAndMemoryAndCameras(deviceName, memory, numberOfCameras,

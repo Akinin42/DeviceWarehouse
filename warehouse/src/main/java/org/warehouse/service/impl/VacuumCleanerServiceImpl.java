@@ -2,7 +2,6 @@ package org.warehouse.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +27,16 @@ public class VacuumCleanerServiceImpl extends DeviceServiceImpl<VacuumCleaner, V
     }
     
     @Override
-    public Optional<VacuumCleaner> findAvailabilityByNameAndAmountAndModes(String deviceName, int amountLitres,
+    public VacuumCleaner findAvailabilityByNameAndAmountAndModes(String deviceName, int amountLitres,
             int numberOfModes, boolean availability) {
-        VacuumCleaner result = null;
-        if (vacuumCleanerDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            List<Model> models = new ArrayList<>(vacuumCleanerDao.findByNameIgnoreCase(deviceName).get().getModels());
-            filterByAmount(models, amountLitres);
-            filterByModes(models, numberOfModes);
-            if (Boolean.TRUE.equals(availability)) {
-                filterByAvailability(models);
-            }
-            result = createResultDevice(vacuumCleanerDao.findByNameIgnoreCase(deviceName).get(), models);
+        checkDeviceExists(deviceName);
+        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
+        filterByAmount(models, amountLitres);
+        filterByModes(models, numberOfModes);
+        if (Boolean.TRUE.equals(availability)) {
+            filterByAvailability(models);
         }
-        return Optional.ofNullable(result);
+        return createResultDevice(vacuumCleanerDao.findByNameIgnoreCase(deviceName).get(), models);
     }
     
     private void filterByAmount(List<Model> models, int amountLitres) {

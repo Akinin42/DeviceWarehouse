@@ -1,7 +1,6 @@
 package org.warehouse.api.v1;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -34,19 +33,19 @@ public class FridgeController {
     }
 
     @GetMapping("/{name}")
-    public Optional<Fridge> findFridge(@PathVariable("name") String deviceName) {
+    public Fridge findFridge(@PathVariable("name") String deviceName) {
         return fridgeService.findByName(deviceName);
     }
 
     @GetMapping(value = "/{name}", params = { "color", "minCost", "maxCost" })
-    public Optional<Fridge> findFridgeByNameAndColorAndCost(@PathVariable("name") String deviceName,
+    public Fridge findFridgeByNameAndColorAndCost(@PathVariable("name") String deviceName,
             @RequestParam("color") String colour, @RequestParam("minCost") int minCost,
             @RequestParam("maxCost") int maxCost) {
         return fridgeService.findByNameAndColorAndCost(deviceName, colour, minCost, maxCost);
     }
 
     @GetMapping(value = "/{name}", params = { "door", "compressor", "availability" })
-    public Optional<Fridge> findAvailabilityFridgeByDoorsAndCompressor(@PathVariable("name") String deviceName,
+    public Fridge findAvailabilityFridgeByDoorsAndCompressor(@PathVariable("name") String deviceName,
             @RequestParam("door") int numberOfDoor, @RequestParam("compressor") String compressor,
             @RequestParam("availability") boolean availability) {
         return fridgeService.findAvailabilityByNameAndDoorsAndCompressor(deviceName, numberOfDoor, compressor,

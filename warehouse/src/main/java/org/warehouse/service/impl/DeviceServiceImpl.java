@@ -2,7 +2,6 @@ package org.warehouse.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,25 +10,35 @@ import org.warehouse.dto.DeviceDto;
 import org.warehouse.dto.ModelDto;
 import org.warehouse.entity.device.Device;
 import org.warehouse.entity.devicemodel.Model;
+import org.warehouse.exception.EntityAlreadyExistException;
+import org.warehouse.exception.EntityNotExistException;
 import org.warehouse.service.DeviceService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
 @Transactional
+@Slf4j
 public abstract class DeviceServiceImpl<E extends Device, T extends Model> implements DeviceService<E, T> {
 
     private final DeviceDao<E> deviceDao;
 
     @Override
     public void addDevice(DeviceDto deviceDto) {
+        if (deviceDao.findByNameIgnoreCase(deviceDto.getName()).isPresent()) {
+            throw new EntityAlreadyExistException(
+                    String.format("Device witn name %s already exists", deviceDto.getName()));
+        }
         deviceDao.save(mapDtoToEntity(deviceDto));
+        log.info(String.format("Device witn name %s saved to datadase", deviceDto.getName()));
     }
 
     @Override
-    public Optional<E> findByName(String deviceName) {
-        return Optional.ofNullable(deviceDao.findByNameIgnoreCase(deviceName).get());
+    public E findByName(String deviceName) {
+        checkDeviceExists(deviceName);
+        return deviceDao.findByNameIgnoreCase(deviceName).get();
     }
 
     @Override
@@ -38,16 +47,12 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
     }
 
     @Override
-    public Optional<E> findByNameAndColorAndCost(String deviceName, String color, int minCost, int maxCost) {
-        E result = null;
-        if (deviceDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            List<Model> models = new ArrayList<>(deviceDao.findByNameIgnoreCase(deviceName).get().getModels());
-            filterByColor(models, color);
-            filterByCost(models, minCost, maxCost);
-            result = createResultDevice(deviceDao.findByNameIgnoreCase(deviceName).get(), models);
-
-        }
-        return Optional.ofNullable(result);
+    public E findByNameAndColorAndCost(String deviceName, String color, int minCost, int maxCost) {
+        checkDeviceExists(deviceName);
+        List<Model> models = new ArrayList<>(getModelsForDevice(deviceName));
+        filterByColor(models, color);
+        filterByCost(models, minCost, maxCost);
+        return createResultDevice(deviceDao.findByNameIgnoreCase(deviceName).get(), models);
     }
 
     private void filterByColor(List<Model> models, String color) {
@@ -70,11 +75,21 @@ public abstract class DeviceServiceImpl<E extends Device, T extends Model> imple
 
     @Override
     public void addModelForDevice(String deviceName, ModelDto modelDto) {
-        if (deviceDao.findByNameIgnoreCase(deviceName).isPresent()) {
-            E device = deviceDao.findByNameIgnoreCase(deviceName).get();
-            device.addModel(mapModelDtoToEntity(modelDto));
-            deviceDao.save(device);
+        checkDeviceExists(deviceName);
+        E device = deviceDao.findByNameIgnoreCase(deviceName).get();
+        device.addModel(mapModelDtoToEntity(modelDto));
+        deviceDao.save(device);
+        log.info(String.format("Model witn name %s added to device %s", modelDto.getName(), deviceName));
+    }
+
+    protected void checkDeviceExists(String deviceName) {
+        if (!deviceDao.findByNameIgnoreCase(deviceName).isPresent()) {
+            throw new EntityNotExistException(String.format("Device witn name %s not exists", deviceName));
         }
+    }
+
+    protected List<Model> getModelsForDevice(String deviceName) {
+        return deviceDao.findByNameIgnoreCase(deviceName).get().getModels();
     }
 
     protected abstract E mapDtoToEntity(DeviceDto deviceDto);
