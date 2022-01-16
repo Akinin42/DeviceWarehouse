@@ -1,3 +1,15 @@
+DELETE FROM models_to_devices;
+DELETE FROM phone_models;
+DELETE FROM computer_models;
+DELETE FROM tvset_models;
+DELETE FROM fridge_models;
+DELETE FROM vacuum_cleaner_models;
+DELETE FROM sizes;
+DELETE FROM phones;
+DELETE FROM tvsets;
+DELETE FROM computers;
+DELETE FROM fridges;
+DELETE FROM vacuum_cleaners;
 INSERT INTO sizes (size_id,length_mm,width_mm,height_mm) VALUES(1,150,75,8);
 INSERT INTO sizes (size_id,length_mm,width_mm,height_mm) VALUES(2,550,330,70);
 INSERT INTO sizes (size_id,length_mm,width_mm,height_mm) VALUES(3,300,200,16);

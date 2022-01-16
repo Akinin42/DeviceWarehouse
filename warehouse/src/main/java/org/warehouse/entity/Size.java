@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -25,9 +26,13 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class Size {
     
+    /*
+     * generator added for test if you use data.sql
+     */
     @Id
     @Column(name = "size_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generatorForTests")
+    @SequenceGenerator(name="generatorForTests", initialValue = 100)
     private Integer id;
     
     private Integer lengthMm;

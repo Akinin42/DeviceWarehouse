@@ -6,9 +6,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class DeviceDto {
-    
-    private Integer id;
+public class DeviceDto {    
     
     @NotBlank
     private String name;

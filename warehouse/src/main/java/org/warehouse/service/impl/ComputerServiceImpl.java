@@ -79,8 +79,7 @@ public class ComputerServiceImpl extends DeviceServiceImpl<Computer, ComputerMod
 
     @Override
     protected Computer mapDtoToEntity(DeviceDto deviceDto) {
-        return Computer.builder()
-                .withId(deviceDto.getId())
+        return Computer.builder()                
                 .withName(deviceDto.getName())
                 .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
                 .withCompany(deviceDto.getCompany())
@@ -97,8 +96,7 @@ public class ComputerServiceImpl extends DeviceServiceImpl<Computer, ComputerMod
                 .withWidthMm(modelDto.getWidthMm())
                 .withHeightMm(modelDto.getHeightMm())
                 .build();
-        return ComputerModel.builder()
-                .withId(tvsetModelDto.getId())
+        return ComputerModel.builder()                
                 .withName(tvsetModelDto.getName())
                 .withSerialNumber(tvsetModelDto.getSerialNumber())
                 .withColor(tvsetModelDto.getColour())

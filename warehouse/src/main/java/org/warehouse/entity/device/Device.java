@@ -14,6 +14,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import org.warehouse.entity.devicemodel.Model;
 
@@ -35,9 +36,13 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode
 public abstract class Device {
 
+    /*
+     * generator added for test if you use data.sql
+     */
     @Id
     @Column(name = "device_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generatorForTests")
+    @SequenceGenerator(name = "generatorForTests", initialValue = 100)
     private Integer id;
 
     private String name;
@@ -47,8 +52,7 @@ public abstract class Device {
     private Boolean installment;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "models_to_devices", joinColumns = @JoinColumn(name = "device_id"),
-        inverseJoinColumns = @JoinColumn(name = "model_id"))
+    @JoinTable(name = "models_to_devices", joinColumns = @JoinColumn(name = "device_id"), inverseJoinColumns = @JoinColumn(name = "model_id"))
     private List<Model> models;
 
     public void addModel(Model model) {

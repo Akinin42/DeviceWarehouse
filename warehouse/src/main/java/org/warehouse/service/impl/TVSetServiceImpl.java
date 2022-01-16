@@ -79,8 +79,7 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
 
     @Override
     protected TVSet mapDtoToEntity(DeviceDto deviceDto) {
-        return TVSet.builder()
-                .withId(deviceDto.getId())
+        return TVSet.builder()                
                 .withName(deviceDto.getName())
                 .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
                 .withCompany(deviceDto.getCompany())
@@ -97,8 +96,7 @@ public class TVSetServiceImpl extends DeviceServiceImpl<TVSet, TVSetModel> imple
                 .withWidthMm(modelDto.getWidthMm())
                 .withHeightMm(modelDto.getHeightMm())
                 .build();
-        return TVSetModel.builder()
-                .withId(tvsetModelDto.getId())
+        return TVSetModel.builder()                
                 .withName(tvsetModelDto.getName())
                 .withSerialNumber(tvsetModelDto.getSerialNumber())
                 .withColor(tvsetModelDto.getColour())

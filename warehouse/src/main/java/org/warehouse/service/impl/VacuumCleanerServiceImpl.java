@@ -77,8 +77,7 @@ public class VacuumCleanerServiceImpl extends DeviceServiceImpl<VacuumCleaner, V
 
     @Override
     protected VacuumCleaner mapDtoToEntity(DeviceDto deviceDto) {
-        return VacuumCleaner.builder()
-                .withId(deviceDto.getId())
+        return VacuumCleaner.builder()                
                 .withName(deviceDto.getName())
                 .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
                 .withCompany(deviceDto.getCompany())
@@ -95,8 +94,7 @@ public class VacuumCleanerServiceImpl extends DeviceServiceImpl<VacuumCleaner, V
                 .withWidthMm(modelDto.getWidthMm())
                 .withHeightMm(modelDto.getHeightMm())
                 .build();
-        return VacuumCleanerModel.builder()
-                .withId(vacuumCleanerModelDto.getId())
+        return VacuumCleanerModel.builder()                
                 .withName(vacuumCleanerModelDto.getName())
                 .withSerialNumber(vacuumCleanerModelDto.getSerialNumber())
                 .withColor(vacuumCleanerModelDto.getColour())

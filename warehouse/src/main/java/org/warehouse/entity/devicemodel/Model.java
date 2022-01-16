@@ -11,6 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 import org.warehouse.entity.Size;
 
@@ -32,9 +33,13 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode
 public abstract class Model {
     
+    /*
+     * generator added for test if you use data.sql
+     */
     @Id
     @Column(name = "model_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generatorForTests")
+    @SequenceGenerator(name="generatorForTests", initialValue = 100)
     private Integer id;
     
     private String name;

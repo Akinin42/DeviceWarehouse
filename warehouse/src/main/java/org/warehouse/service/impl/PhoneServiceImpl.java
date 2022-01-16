@@ -77,8 +77,7 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
 
     @Override
     protected Phone mapDtoToEntity(DeviceDto deviceDto) {
-        return Phone.builder()
-                .withId(deviceDto.getId())
+        return Phone.builder()                
                 .withName(deviceDto.getName())
                 .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
                 .withCompany(deviceDto.getCompany())
@@ -95,8 +94,7 @@ public class PhoneServiceImpl extends DeviceServiceImpl<Phone, PhoneModel> imple
                 .withWidthMm(modelDto.getWidthMm())
                 .withHeightMm(modelDto.getHeightMm())
                 .build();
-        return PhoneModel.builder()
-                .withId(phoneModelDto.getId())
+        return PhoneModel.builder()                
                 .withName(phoneModelDto.getName())
                 .withSerialNumber(phoneModelDto.getSerialNumber())
                 .withColor(phoneModelDto.getColour())

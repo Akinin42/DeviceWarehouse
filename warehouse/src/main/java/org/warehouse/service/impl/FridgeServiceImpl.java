@@ -79,8 +79,7 @@ public class FridgeServiceImpl extends DeviceServiceImpl<Fridge, FridgeModel> im
 
     @Override
     protected Fridge mapDtoToEntity(DeviceDto deviceDto) {
-        return Fridge.builder()
-                .withId(deviceDto.getId())
+        return Fridge.builder()                
                 .withName(deviceDto.getName())
                 .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
                 .withCompany(deviceDto.getCompany())
@@ -97,8 +96,7 @@ public class FridgeServiceImpl extends DeviceServiceImpl<Fridge, FridgeModel> im
                 .withWidthMm(modelDto.getWidthMm())
                 .withHeightMm(modelDto.getHeightMm())
                 .build();
-        return FridgeModel.builder()
-                .withId(fridgeModelDto.getId())
+        return FridgeModel.builder()                
                 .withName(fridgeModelDto.getName())
                 .withSerialNumber(fridgeModelDto.getSerialNumber())
                 .withColor(fridgeModelDto.getColour())

@@ -44,8 +44,7 @@ class PhoneServiceImplTest {
         deviceDto.setCompany("test");
         deviceDto.setInstallment(true);
         deviceDto.setOnlineOrder(true);
-        Phone phoneFromDto = Phone.builder()
-                                .withId(deviceDto.getId())
+        Phone phoneFromDto = Phone.builder()                                
                                 .withName(deviceDto.getName())
                                 .withCountryOfManufacture(deviceDto.getCountryOfManufacture())
                                 .withCompany(deviceDto.getCompany())
@@ -95,18 +94,42 @@ class PhoneServiceImplTest {
     }
     
     @Test
-    void findAllByCostShouldReturnExpectedPhones() {        
-        List<Phone> expected = new ArrayList<>();
-        Phone phone = CreatorTestEntities.createPhones().get(1);
-        phone.removeModel(CreatorTestEntities.createPhoneModels().get(3));
-        expected.add(phone);
-        assertThat(phoneService.findAllByCost(50000, 0)).isEqualTo(expected);
+    void findAllByColorShouldReturnEmptyListWhenColorNotExist() {
+        assertThat(phoneService.findAllByColor("Green")).isEmpty();
     }
     
     @Test
-    void findAllByCostShouldReturnEmptyListWhenTheirNot() {        
+    void findAllByColorShouldReturnAllPhonesWhenColorNull() {
+        List<Phone> expected = CreatorTestEntities.createPhones();
+        assertThat(phoneService.findAllByColor(null)).isEqualTo(expected);
+    }
+    
+    @Test
+    void findAllByColorShouldReturnAllPhonesWhenColorEmpty() {
+        List<Phone> expected = CreatorTestEntities.createPhones();
+        assertThat(phoneService.findAllByColor("")).isEqualTo(expected);
+    }
+    
+    @Test
+    void findAllByCostShouldReturnExpectedPhones() {        
         List<Phone> expected = new ArrayList<>();
-        assertThat(phoneService.findAllByCost(0, 10)).isEqualTo(expected);
+        Phone phone = CreatorTestEntities.createPhones().get(0);
+        phone.removeModel(CreatorTestEntities.createPhoneModels().get(1));
+        expected.add(phone);
+        phone = CreatorTestEntities.createPhones().get(1);
+        phone.removeModel(CreatorTestEntities.createPhoneModels().get(2));
+        expected.add(phone);
+        assertThat(phoneService.findAllByCost(25000, 50000)).isEqualTo(expected);
+    }
+    
+    @Test
+    void findAllByCostShouldReturnEmptyListWhenCostNotExists() {
+        assertThat(phoneService.findAllByCost(2000000, 0)).isEmpty();
+    }
+    
+    @Test
+    void findAllByCostShouldReturnEmptyListWhenTheirNot() {
+        assertThat(phoneService.findAllByCost(0, 10)).isEmpty();
     }
     
     @Test
@@ -128,6 +151,17 @@ class PhoneServiceImplTest {
         phone.removeModel(CreatorTestEntities.createPhoneModels().get(3));
         expected.add(phone);
         assertThat(phoneService.findAllByMemory(1500)).isEqualTo(expected);
+    }
+    
+    @Test
+    void findAllByMemoryShouldReturnAllPhonesWhenInputZero() {        
+        List<Phone> expected = CreatorTestEntities.createPhones();
+        assertThat(phoneService.findAllByMemory(0)).isEqualTo(expected);
+    }
+    
+    @Test
+    void findAllByMemoryShouldReturnEmptyListWhenInputNotExist() {
+        assertThat(phoneService.findAllByMemory(5000)).isEmpty();
     }
     
     @Test

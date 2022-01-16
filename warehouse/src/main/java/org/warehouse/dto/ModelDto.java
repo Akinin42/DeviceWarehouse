@@ -18,10 +18,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @EqualsAndHashCode
-public class ModelDto {
-    
-    private Integer id;
-    
+public class ModelDto {    
+ 
     @NotBlank
     private String name;
     
