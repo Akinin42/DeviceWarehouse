@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+      <Resource name="jdbc/devicewarehouse" auth="Container"
+        type="javax.sql.DataSource" 
+        username="customer"
+        password="password"
+        url="jdbc:postgresql://postgres:5432/devicewarehouse"
+        driverClassName="org.postgresql.Driver" 
+        initialSize="5"
+        maxWait="5000"
+        maxActive="120" 
+        maxIdle="5"
+        validationQuery="select 1" 
+        poolPreparedStatements="true" /> 
+        <ResourceLink auth="Container" name="jdbc/devicewarehouse" global="jdbc/devicewarehouse" type="javax.sql.DataSource" /> 
+</Context>
