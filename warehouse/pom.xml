@@ -108,7 +108,7 @@
                                         <exclude>org.warehouse.entity*</exclude>
                                         <exclude>org.warehouse.dto*</exclude>
                                         <exclude>org.warehouse.config*</exclude>
-                                        <exclude>org.university.WarehouseApplicationStarter*</exclude>
+                                        <exclude>org.warehouse.WarehouseApplicationStarter*</exclude>
                                     </excludes>
                                     <limits>
                                         <limit>
