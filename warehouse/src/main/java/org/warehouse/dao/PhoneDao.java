@@ -5,5 +5,4 @@ import org.warehouse.entity.device.Phone;
 
 @Repository
 public interface PhoneDao extends DeviceDao<Phone> {
-
 }

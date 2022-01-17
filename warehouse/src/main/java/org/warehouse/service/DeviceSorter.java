@@ -17,9 +17,6 @@ public class DeviceSorter<E extends Device> {
         devices = deleteDeviceWithouModels(devices);
         while (!devices.isEmpty()) {
             for (E device : devices) {
-                if (device.getModels().isEmpty()) {
-                    devices.remove(device);
-                }
                 for (Model model : device.getModels()) {
                     if (model.getCost() <= minCost) {
                         minCost = model.getCost();
